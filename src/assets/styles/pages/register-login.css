@@ -1,0 +1,217 @@
+/* import global CSS */
+@import url("../global.css");
+
+/* seting body */
+body {
+  background: url("/bg-avenger.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  /* attack = fixed, bg img disable scroll */
+  background-attachment: fixed;
+  height: 100vh;
+}
+
+/* universal css, scope register */
+* {
+  color: var(--title_info);
+}
+
+/* masking background image */
+/* body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgb(0, 0, 0, 0.6);
+  z-index: 1;
+} */
+
+/* wrapper element */
+section {
+  position: relative;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* width 40% from screen
+    and min 350px */
+  width: 40vw;
+  min-width: 350px;
+  z-index: 2;
+}
+
+/* untuk logo */
+.logo {
+  position: relative;
+  margin: auto;
+  margin-top: 20px;
+}
+
+/* div logo tickitz */
+div.logo > img {
+  width: 15vw;
+}
+
+section div form {
+  align-items: center;
+}
+
+/* card flex contaier */
+.card-flex {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background);
+  border-radius: 8px;
+  /* min width & 40% with window */
+  /* width: max(400px, 40vw); */
+  /* top right bottom left */
+  padding: 0 30px 0 30px;
+  align-self: center;
+  width: 480px;
+}
+
+/* flex step register step -> top div */
+div.card-flex div.step {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+div.step div {
+  color: var(--secondary);
+  font-size: 14px;
+  margin: 10px 0 10px 0;
+}
+div.step div:nth-child(1) {
+  color: var(--title_info);
+  font-size: 14px;
+  margin: 10px 0 10px 0;
+}
+div.step div div {
+  background-color: var(--secondary);
+  height: 45px;
+  width: 45px;
+  border-radius: 50%;
+  color: var(--background);
+  text-align: center;
+  align-content: center;
+}
+div.step div:nth-child(1) div {
+  background-color: var(--blue_primary);
+  height: 45px;
+  width: 45px;
+  border-radius: 50%;
+  color: var(--background);
+  text-align: center;
+  align-content: center;
+}
+
+/* margin login page top div */
+div.card-flex div h1 {
+  color: black;
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+div.card-flex div p {
+  color: var(--secondary);
+  text-align: justify;
+}
+
+/* element inside form /elemet flex item */
+div.card-flex div {
+  /* align-self: center; */
+  padding: 10px;
+}
+
+/* inputan element */
+input[type="text"] {
+  width: 400px;
+  height: 40px;
+  padding: 12px 30px;
+  border-radius: 2px;
+  border: 2 solid var(--title_info);
+  background-color: white;
+}
+input[type="password"] {
+  width: 400px;
+  height: 40px;
+  padding: 12px 30px;
+  border-radius: 2px;
+  border: 2 solid var(--title_info);
+  background-color: white;
+}
+input[type="checkbox"] {
+  height: 18px;
+  width: 18px;
+}
+button[type="submit"] {
+  background-color: var(--blue_primary);
+  color: var(--background);
+  width: 400px;
+  height: 60px;
+  border-radius: 4px;
+  border: 1px solid rgb(0, 0, 0, 0.1);
+}
+
+div.register {
+  align-self: center;
+}
+
+div.login {
+  align-self: self-end;
+}
+
+a {
+  color: var(--blue_primary);
+}
+
+/* hr style */
+hr.hr_style {
+  overflow: visible;
+  border: 0;
+  padding: 0;
+  height: 0.5px;
+  background: var(--title_info_2);
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.75),
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.75),
+    rgba(0, 0, 0, 0)
+  );
+  /* border-top: medium double #333; */
+  text-align: center;
+  margin: 20px 0 20px 0;
+}
+hr.hr_style::after {
+  content: "Or";
+  display: inline-block;
+  position: relative;
+  top: -11px;
+  left: -12px;
+  font-size: 12px;
+  /* padding: 0 0.25em; */
+  color: var(--title_info_2);
+  background-color: var(--background);
+}
+
+/* div-flex for container google and facebook btn */
+div.card-flex div:nth-child(8) {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 50px;
+}
+button[type="button"] {
+  background-color: var(--background);
+  color: var(--title_info);
+  font-size: 18px;
+  width: 180px;
+  height: 60px;
+  border-radius: 4px;
+  border: 1px solid rgb(0, 0, 0, 0.3);
+  box-shadow: 3px 3px 29px var(--title_info_2);
+}
