@@ -1,0 +1,96 @@
+/* import global CSS */
+@import url("../global.css");
+
+/* section jumbotron */
+section.jumbotron {
+  /* background image seting */
+  background: linear-gradient(rgb(0, 0, 0, 0.6)), url(/bg-avenger.png);
+  background-position: 100px;
+  margin-top: 100px;
+  height: 500px;
+  margin-bottom: 50px;
+
+  align-content: center;
+}
+section.jumbotron div:nth-child(1) {
+  color: var(--background);
+  font-size: 18px;
+  font-weight: 700;
+
+  margin-left: 300px;
+}
+section.jumbotron div:nth-child(2) {
+  color: var(--background);
+  font-size: 48px;
+  font-weight: lighter;
+
+  margin-left: 300px;
+}
+section.jumbotron > img:nth-child(3) {
+  position: absolute;
+  bottom: 110px;
+  left: 50vw;
+}
+
+/* section album */
+section.album {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+section.album > div:nth-child(1) {
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  gap: 10px;
+}
+div.event {
+  display: flex;
+  flex-direction: column;
+}
+div.event input {
+  height: 50px;
+  width: 340px;
+  border: 1px solid var(--secondary);
+  border-radius: 5px;
+}
+div.filter a {
+  text-decoration: none;
+  display: block;
+  padding: 10px;
+  background-color: var(white);
+  color: var(--label-info);
+  float: left;
+  border-radius: 12px;
+  margin: 10px;
+}
+div.filter a:hover {
+  background-color: var(--blue_primary);
+  color: var(--background);
+}
+div.number {
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  gap: 20px;
+}
+div.number div {
+  background-color: var(--label-genre);
+  color: var(--secondary);
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+
+  /* horizontaly center */
+  text-align: center;
+  /* verticaly center */
+  align-content: center;
+}
+div.number > div:first-child {
+  background-color: var(--blue_primary);
+  color: var(--background);
+}
+div.number div:last-child {
+  background-color: var(--blue_primary);
+  color: var(--background);
+}
