@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import ListItem from "./../../atoms/Link/ListItem.jsx";
+import ListItem from "../atoms/Link/ListItem.jsx";
 import { Link } from "react-router";
 
 /**

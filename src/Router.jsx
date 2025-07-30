@@ -8,7 +8,7 @@ import Home from "./components/pages/HomePages.jsx";
 import Movies from "./components/pages/MoviesPages.jsx";
 import BuyTicket from "./components/pages/BuyTicket.jsx";
 
-import Navbar from "./components/organism/Navbar/Navbar.jsx";
+import Navbar from "./components/organism/Navbar.jsx";
 
 function Router() {
   return (
