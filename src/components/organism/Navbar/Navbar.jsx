@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import ListItem from "./../../atoms/Link/ListItem.jsx";
+import { Link } from "react-router";
 
 /**
  * Navbar Komponen organism, digunakan untuk beberapa page
@@ -34,9 +35,22 @@ function Navbar() {
           })}
         </ul>
 
-        <div className="hidden md:flex md:flex-row md:gap-3 md:items-center"></div>
+        <div className="hidden md:flex md:flex-row md:gap-3 md:items-center">
+          <Link
+            className="block bg-white p-2.5 text-blue-700 border border-blue-700 rounded-sm"
+            to="/login"
+          >
+            SignIn
+          </Link>
+          <Link
+            className="block bg-blue-700 p-2.5 text-white rounded-sm"
+            to="/register"
+          >
+            Sign Up
+          </Link>
+        </div>
 
-        {/* Hide hamburger when small screen */}
+        {/* Hide hamburger, show when small screen */}
         <div className="block md:hidden" onClick={ToggleDiv}>
           <img src="./icon-hamburger-menu.svg" alt="hamburger" />
         </div>
