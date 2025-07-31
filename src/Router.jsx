@@ -9,6 +9,7 @@ import Movies from "./components/pages/MoviesPages.jsx";
 import BuyTicket from "./components/pages/BuyTicket.jsx";
 
 import Navbar from "./components/organism/Navbar.jsx";
+import Footer from "./components/organism/Footer.jsx";
 
 function Router() {
   return (
@@ -33,6 +34,7 @@ function Routelayout() {
     <>
       <Navbar />
       <Outlet />
+      <Footer />
     </>
   );
 }
