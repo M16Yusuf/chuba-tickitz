@@ -10,6 +10,7 @@ import BuyTicket from "./components/pages/BuyTicket.jsx";
 
 import Navbar from "./components/organism/Navbar.jsx";
 import Footer from "./components/organism/Footer.jsx";
+import Subscribe from "./components/organism/SectionSubscribe.jsx";
 
 function Router() {
   return (
@@ -34,6 +35,7 @@ function Routelayout() {
     <>
       <Navbar />
       <Outlet />
+      <Subscribe />
       <Footer />
     </>
   );
