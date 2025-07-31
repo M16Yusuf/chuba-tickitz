@@ -26,7 +26,7 @@ function Navbar() {
       <nav className="flex w-full bg-white-500 justify-between items-center p-6 md:justify-around">
         <img
           className="w-24 h-9  sm:w-32 sm:h-12"
-          src="./logo-blue_tickitz.svg"
+          src="/logo-blue_tickitz.svg"
           alt="test"
         />
         <ul className="hidden md:flex md:flex-row md:gap-5">
@@ -52,7 +52,7 @@ function Navbar() {
 
         {/* Hide hamburger, show when small screen */}
         <div className="block md:hidden" onClick={ToggleDiv}>
-          <img src="./icon-hamburger-menu.svg" alt="hamburger" />
+          <img src="/icon-hamburger-menu.svg" alt="hamburger" />
         </div>
       </nav>
 
