@@ -17,7 +17,7 @@ function Navbar() {
 
   const navBtn = [
     { text: "Home", route: "/home" },
-    { text: "Movie", route: "/movie" },
+    { text: "Movie", route: "/movies" },
     { text: "Buy Ticket", route: "/buyticket" },
   ];
 
