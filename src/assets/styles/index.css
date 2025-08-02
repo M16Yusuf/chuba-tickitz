@@ -3,20 +3,23 @@
 /* import google font : Mulish */
 @import url("https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap");
 
-:root {
-  /* custom variabel */
-  --blue_primary: #1d4ed8;
-  --secondary: #a0a3bd;
-  --importan: #d00707;
-  --active: #00ba88;
-  --title_info: #4e4b66;
-  --title_info_2: #aaaaaa;
-  --background: #f5f6f8;
-  --label: #6e7191;
-  --label-genre: #a0a3bd33;
-  --label_input: #eff0f6;
-  --bg_grid_item: #d6d8e7;
-  --bg_grid_pink: #f589d7;
+@theme {
+  /* custom color variabel */
+  --color-blue-primary: #1d4ed8;
+  --color-secondary: #a0a3bd;
+  --color-importan: #d00707;
+  --color-active: #00ba88;
+  --color-title-info: #4e4b66;
+  --color-title-info_2: #aaaaaa;
+  --color-background: #f5f6f8;
+  --color-label: #6e7191;
+  --color-label-genre: #a0a3bd33;
+  --color-label-input: #eff0f6;
+  --color-bg-grid-item: #d6d8e7;
+  --color-bg-grid-pink: #f589d7;
+
+  /* custom size */
+  --width-custom-max-main: 1440px;
 }
 
 /* Universal CSS */
