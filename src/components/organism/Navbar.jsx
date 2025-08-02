@@ -11,7 +11,7 @@ function Navbar() {
 
   const ToggleDiv = () => {
     setToggleBurger((prev) =>
-      prev.includes("hidden") ? prev.replace("hidden", "") : `${prev} hidden`
+      prev.includes("hidden") ? prev.replace("hidden", "") : `${prev} hidden`,
     );
   };
 
@@ -22,10 +22,10 @@ function Navbar() {
   ];
 
   return (
-    <header className="shadow-md bg-white w-full sticky top-0 z-10">
-      <nav className="flex w-full bg-white-500 justify-between items-center p-6 md:justify-around">
+    <header className="sticky top-0 z-10 w-full bg-white shadow-md">
+      <nav className="md:w-custom-max-main bg-white-500 flex w-full items-center justify-between p-6 md:justify-around md:justify-self-center">
         <img
-          className="w-24 h-9  sm:w-32 sm:h-12"
+          className="h-9 w-24 sm:h-12 sm:w-32"
           src="/logo-blue_tickitz.svg"
           alt="test"
         />
@@ -35,15 +35,15 @@ function Navbar() {
           })}
         </ul>
 
-        <div className="hidden md:flex md:flex-row md:gap-3 md:items-center">
+        <div className="hidden md:flex md:flex-row md:items-center md:gap-3">
           <Link
-            className="block bg-white p-2.5 text-blue-700 border border-blue-700 rounded-sm"
+            className="block rounded-sm border border-blue-700 bg-white p-2.5 text-blue-700"
             to="/login"
           >
             SignIn
           </Link>
           <Link
-            className="block bg-blue-700 p-2.5 text-white rounded-sm"
+            className="block rounded-sm bg-blue-700 p-2.5 text-white"
             to="/register"
           >
             Sign Up
@@ -65,7 +65,7 @@ function Navbar() {
               key={idx}
               to={nav.route}
               className={
-                "block p-3 text-center border border-solid border-gray-100"
+                "block border border-solid border-gray-100 p-3 text-center"
               }
             />
           );
