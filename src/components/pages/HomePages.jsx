@@ -71,7 +71,7 @@ function HomePages() {
   }, []);
 
   return (
-    <main className="md:w-custom-max-main p-3 md:justify-self-center md:p-20">
+    <main className="md:max-w-custom-max-main w-full p-3 md:justify-self-center md:p-20">
       <section className="flex flex-col gap-5 md:flex-row md:justify-center">
         <div className="hero-text my-7 flex flex-col items-center justify-center gap-4 md:w-[580px] md:items-start">
           <span className="text-center text-[18px] font-bold text-blue-700">
@@ -81,12 +81,11 @@ function HomePages() {
             Experience the Magic of Cinema: Book Your Tickets Today
           </span>
           <span className="text-gray-400">
-            {" "}
-            Sign up and get the ticket with a lot of discount{" "}
+            Sign up and get the ticket with a lot of discount
           </span>
         </div>
         {/* [grid-template-areas:'a_c_c','b_b_d'] */}
-        <div className="flex flex-row gap-2">
+        <div className="flex flex-row gap-2 self-center">
           <div className="flex flex-col gap-2">
             <img src="./hero-item-wick.png" alt="john wick" />
             <img src="./hero-item-spiderman.png" alt="spiderman home coming" />
@@ -107,8 +106,8 @@ function HomePages() {
         <span className="text-3xl font-normal">
           Unleashing the Ultimate Movie Experience
         </span>
-        <div className="flex flex-col items-center gap-5 md:max-w-max md:flex-row md:self-center">
-          <div className="flex flex-col items-center gap-5 md:items-start">
+        <div className="flex flex-col items-center gap-5 md:max-w-max md:flex-row md:flex-wrap md:self-center">
+          <div className="flex flex-col items-center gap-5 md:max-w-[340px] md:items-start">
             <img src="/icon-blue_shield.svg" alt="blue_shield" />
             <span className="text-lg font-bold"> Guaranteed </span>
             <p className="text-center text-shadow-gray-600 md:text-justify">
@@ -118,7 +117,7 @@ function HomePages() {
               commodi.
             </p>
           </div>
-          <div className="flex flex-col items-center gap-5 md:items-start">
+          <div className="flex flex-col items-center gap-5 md:max-w-[340px] md:items-start">
             <img src="/icon-blue_check.svg" alt="blue_check" />
             <span className="text-lg font-bold"> Affordable </span>
             <p className="text-center text-shadow-gray-600 md:text-justify">
@@ -128,7 +127,7 @@ function HomePages() {
               commodi.
             </p>
           </div>
-          <div className="flex flex-col items-center gap-5 md:items-start">
+          <div className="flex flex-col items-center gap-5 md:max-w-[340px] md:items-start">
             <img src="/icon-blue_discus.svg" alt="blue_discus" />
             <span className="text-lg font-bold"> 24/7 Customer Support </span>
             <p className="text-center text-shadow-gray-600 md:text-justify">
@@ -150,12 +149,31 @@ function HomePages() {
           {airing.map((itemMovie) => {
             return (
               <div className="flex max-w-2xs flex-col gap-4" key={itemMovie.id}>
-                <img
-                  className="max-w-[264px] rounded-md"
-                  src={`${import.meta.env.VITE_PREFIX_IMG_TMDB}/${itemMovie.poster}`}
-                  alt={itemMovie.title}
-                />
-                <span className="text-2xl font-bold">{itemMovie.title}</span>
+                <div className="group relative max-w-[264px]">
+                  <img
+                    className="h-full w-full rounded-md bg-cover"
+                    src={`${import.meta.env.VITE_PREFIX_IMG_TMDB}/${itemMovie.poster}`}
+                    alt={itemMovie.title}
+                  />
+                  <div className="absolute inset-0 hidden flex-col justify-center gap-5 rounded-md bg-[rgb(0,0,0,0.8)] group-hover:flex">
+                    <Link
+                      to={`/movies/${itemMovie.id}`}
+                      className="flex h-12 w-44 items-center justify-center self-center rounded-md border border-white text-white hover:shadow-lg hover:shadow-white"
+                    >
+                      Details
+                    </Link>
+                    <span className="bg-blue-primary flex h-12 w-44 items-center justify-center self-center rounded-md text-white transition-shadow hover:shadow-lg hover:shadow-blue-700">
+                      Buy Ticket
+                    </span>
+                  </div>
+                </div>
+
+                <Link
+                  to={`/movies/${itemMovie.id}`}
+                  className="text-2xl font-bold"
+                >
+                  {itemMovie.title}
+                </Link>
                 <div className="flex flex-row flex-wrap gap-1">
                   {itemMovie.genres.map((itemGenre, idx) => {
                     return (
@@ -176,7 +194,7 @@ function HomePages() {
         <div>
           <Link
             className="text-blue-primary text-lg font-bold"
-            to="/movie"
+            to="/movies"
           >{`View All ->`}</Link>
         </div>
       </section>
@@ -191,7 +209,7 @@ function HomePages() {
               Exciting Movie Coming Soon
             </div>
           </div>
-          <div className="hidden gap-2.5 md:block md:flex md:flex-row">
+          <div className="hidden gap-2.5 md:flex md:flex-row">
             <div className="bg-secondary block h-[69px] w-[69px] content-center rounded-full text-center text-white">
               ←
             </div>
@@ -205,12 +223,32 @@ function HomePages() {
           {camSoon.map((itemMovie) => {
             return (
               <div className="flex max-w-2xs flex-col gap-4" key={itemMovie.id}>
-                <img
-                  className="max-w-[264px] rounded-md"
-                  src={`${import.meta.env.VITE_PREFIX_IMG_TMDB}/${itemMovie.poster}`}
-                  alt={itemMovie.title}
-                />
-                <span className="text-2xl font-bold">{itemMovie.title}</span>
+                <div className="group relative max-h-[405px] max-w-[264px]">
+                  <img
+                    className="h-full w-full rounded-md bg-cover"
+                    src={`${import.meta.env.VITE_PREFIX_IMG_TMDB}/${itemMovie.poster}`}
+                    alt={itemMovie.title}
+                  />
+
+                  <div className="absolute inset-0 hidden flex-col justify-center gap-5 rounded-md bg-[rgb(0,0,0,0.8)] group-hover:flex">
+                    <Link
+                      to={`/movies/${itemMovie.id}`}
+                      className="flex h-12 w-44 items-center justify-center self-center rounded-md border border-white text-white hover:shadow-lg hover:shadow-white"
+                    >
+                      Details
+                    </Link>
+                    <span className="bg-blue-primary flex h-12 w-44 items-center justify-center self-center rounded-md text-white transition-shadow hover:shadow-lg hover:shadow-blue-700">
+                      Buy Ticket
+                    </span>
+                  </div>
+                </div>
+
+                <Link
+                  to={`/movies/${itemMovie.id}`}
+                  className="text-2xl font-bold"
+                >
+                  {itemMovie.title}
+                </Link>
                 <div className="flex flex-row flex-wrap gap-1">
                   {itemMovie.genres.map((itemGenre, idx) => {
                     return (
