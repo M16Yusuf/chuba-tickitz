@@ -9,10 +9,13 @@ import Home from "./components/pages/HomePages.jsx";
 import Movies from "./components/pages/MoviesPages.jsx";
 import BuyTicket from "./components/pages/BuyTicket.jsx";
 import MovieDetails from "./components/pages/MovieDetails.jsx";
+import ProfileHome from "./components/pages/profile/Profile.jsx";
 
 // component layout
 import LayoutHome from "./components/layout/LayoutHome.jsx";
 import LayoutMovie from "./components/layout/LayoutMovie.jsx";
+import LayoutProfile from "./components/layout/LayoutProfile.jsx";
+import PrivateRoute from "./components/Auth/PrivateRoute.jsx";
 
 function Router() {
   return (
@@ -33,6 +36,18 @@ function Router() {
         {/* route for layoutMovie for, movie details, seat, payment, ticket */}
         <Route path="movies" element={<LayoutMovie />}>
           <Route path="details/:movieId" element={<MovieDetails />} />
+        </Route>
+
+        {/* route for layout profile */}
+        <Route path="profile" element={<LayoutProfile />}>
+          <Route
+            index
+            element={
+              <PrivateRoute redirectTo="/login">
+                <ProfileHome />
+              </PrivateRoute>
+            }
+          />
         </Route>
       </Routes>
     </BrowserRouter>
