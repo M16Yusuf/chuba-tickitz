@@ -32,7 +32,7 @@ function Router() {
 
         {/* route for layoutMovie for, movie details, seat, payment, ticket */}
         <Route path="movies" element={<LayoutMovie />}>
-          <Route path=":movieId" element={<MovieDetails />} />
+          <Route path="details/:movieId" element={<MovieDetails />} />
         </Route>
       </Routes>
     </BrowserRouter>
