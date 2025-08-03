@@ -207,12 +207,12 @@ function MoviesPages() {
               </div>
             </div>
 
-            <section className="m-5 flex flex-row gap-2 justify-self-center">
+            <section className="m-5 mt-2.5 flex flex-row justify-self-center">
               {[1, 2, 3, 4, 5].map((pageNumber, idx) => {
                 return (
                   <div
                     key={idx}
-                    className="bg-label-genre h-[40px] w-[40px] cursor-pointer justify-items-center rounded-full text-center"
+                    className="inline-block rounded-full bg-[#A0A3BD1A] px-4 py-2 text-[#A0A3BD] transition hover:bg-blue-700 hover:text-white"
                     onClick={() => {
                       // logika paginasi
                       setSearchParams((searchParams) => {
