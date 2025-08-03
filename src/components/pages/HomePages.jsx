@@ -157,7 +157,7 @@ function HomePages() {
                   />
                   <div className="absolute inset-0 hidden flex-col justify-center gap-5 rounded-md bg-[rgb(0,0,0,0.8)] group-hover:flex">
                     <Link
-                      to={`/movies/${itemMovie.id}`}
+                      to={`/movies/details/${itemMovie.id}`}
                       className="flex h-12 w-44 items-center justify-center self-center rounded-md border border-white text-white hover:shadow-lg hover:shadow-white"
                     >
                       Details
@@ -169,7 +169,7 @@ function HomePages() {
                 </div>
 
                 <Link
-                  to={`/movies/${itemMovie.id}`}
+                  to={`/movies/details/${itemMovie.id}`}
                   className="text-2xl font-bold"
                 >
                   {itemMovie.title}
@@ -232,7 +232,7 @@ function HomePages() {
 
                   <div className="absolute inset-0 hidden flex-col justify-center gap-5 rounded-md bg-[rgb(0,0,0,0.8)] group-hover:flex">
                     <Link
-                      to={`/movies/${itemMovie.id}`}
+                      to={`/movies/details/${itemMovie.id}`}
                       className="flex h-12 w-44 items-center justify-center self-center rounded-md border border-white text-white hover:shadow-lg hover:shadow-white"
                     >
                       Details
@@ -244,7 +244,7 @@ function HomePages() {
                 </div>
 
                 <Link
-                  to={`/movies/${itemMovie.id}`}
+                  to={`/movies/details/${itemMovie.id}`}
                   className="text-2xl font-bold"
                 >
                   {itemMovie.title}
