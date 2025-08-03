@@ -23,7 +23,7 @@ function Navbar() {
 
   return (
     <header className="sticky top-0 z-10 w-full bg-white shadow-md">
-      <nav className="md:w-custom-max-main bg-white-500 flex w-full items-center justify-between p-6 md:justify-around md:justify-self-center">
+      <nav className="md:w-max-custom-max-main bg-white-500 flex w-full items-center justify-between p-6 md:justify-around md:justify-self-center">
         <img
           className="h-9 w-24 sm:h-12 sm:w-32"
           src="/logo-blue_tickitz.svg"

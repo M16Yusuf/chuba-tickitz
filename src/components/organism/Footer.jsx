@@ -1,6 +1,6 @@
 function Footer() {
   return (
-    <main className="md:w-custom-max-main p-5 md:justify-self-center md:p-20">
+    <main className="md:max-w-custom-max-main w-full p-5 md:justify-self-center md:p-20">
       <footer className="">
         <div className="flex flex-col gap-7 md:flex-row md:items-start md:justify-around">
           <div>
