@@ -7,7 +7,7 @@ import { Navigate } from "react-router";
  * @returns
  */
 function PrivateRoute({ redirectTo, children }) {
-  if (localStorage.getItem("koda3:count") == null) {
+  if (localStorage.getItem("koda3:login") == null) {
     return <Navigate to={redirectTo} replace />;
   }
   // if logged, u can navigate

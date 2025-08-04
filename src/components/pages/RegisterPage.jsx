@@ -1,12 +1,25 @@
 import React, { Fragment, useState } from "react";
 
 // import "../../assets/styles/pages/register-login.css";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { LoginPersist } from "/src/components/Auth/LoginPersist.jsx";
 
 function RegisterPage() {
-  const inputData = {};
-  const [formData, setFormData] = useState([]);
   const [error, setError] = useState([]);
+  const navigate = useNavigate();
+
+  function submitData(event) {
+    event.preventDefault();
+    const formEmail = event.target.ele_mail.value;
+    const formPass = event.target.pass.value;
+    setTimeout(() => {
+      LoginPersist(formEmail, formPass);
+    }, 1000);
+
+    if (localStorage.getItem("koda3:login") != null) {
+      navigate("/profile");
+    }
+  }
 
   function validationInput(ev) {
     ev.preventDefault();
@@ -69,27 +82,27 @@ function RegisterPage() {
   return (
     <div className="bgLoginRegister">
       <section className="relative m-auto flex flex-col items-center">
-        <div className="mt-5 m-auto w-[25%]">
+        <div className="m-auto mt-5 w-[25%]">
           <img src="/logo-tickitz-white.png" alt="logo Tickitz" />
         </div>
 
-        <form>
-          <div className="flex flex-col gap-4 bg-white rounded-md px-7 self-center w-[480px]">
+        <form onSubmit={submitData}>
+          <div className="flex w-[480px] flex-col gap-4 self-center rounded-md bg-white px-7">
             <div className="step flex flex-row justify-between">
               <div>
-                <div className="bg-blue-700 text-white h-11 w-11 rounded-full content-center text-center">
+                <div className="h-11 w-11 content-center rounded-full bg-blue-700 text-center text-white">
                   1
                 </div>
                 Fill Form
               </div>
               <div>
-                <div className="bg-[#a0a3bd] h-11 w-11 rounded-full content-center text-center">
+                <div className="h-11 w-11 content-center rounded-full bg-[#a0a3bd] text-center">
                   2
                 </div>
                 Activate
               </div>
               <div>
-                <div className="bg-[#a0a3bd] h-11 w-11 rounded-full content-center text-center">
+                <div className="h-11 w-11 content-center rounded-full bg-[#a0a3bd] text-center">
                   3
                 </div>
                 Done
@@ -100,7 +113,7 @@ function RegisterPage() {
               <br />
               <input
                 type="text"
-                className="w-[400px] h-10 rounded-xs bg-white border-2 border-[#aaaaaa] px-3"
+                className="h-10 w-[400px] rounded-xs border-2 border-[#aaaaaa] bg-white px-3"
                 name="ele_mail"
                 placeholder="Enter your email"
                 id="ele_mail"
@@ -111,7 +124,7 @@ function RegisterPage() {
               <br />
               <input
                 type="password"
-                className="w-[400px] h-10 rounded-xs bg-white border-2 border-[#aaaaaa] px-3"
+                className="h-10 w-[400px] rounded-xs border-2 border-[#aaaaaa] bg-white px-3"
                 name="pass"
                 placeholder="Enter your Passwod"
                 id="pass"
@@ -125,7 +138,7 @@ function RegisterPage() {
             </div>
             <div>
               <button
-                className="bg-blue-700 text-white w-[400px] h-14 rounded-b-sm"
+                className="h-14 w-[400px] rounded-b-sm bg-blue-700 text-white"
                 type="submit"
               >
                 Join For Free Now
@@ -140,14 +153,14 @@ function RegisterPage() {
             <hr className="hr_style" />
             <div>
               <button
-                className="bg-white text-[#4e4b66] w-44 shadow-sm"
+                className="w-44 bg-white text-[#4e4b66] shadow-sm"
                 type="button"
               >
                 <img src="/icon_google.svg" alt="icon_google" />
                 Google
               </button>
               <button
-                className="bg-white text-[#4e4b66] w-44 shadow-sm"
+                className="w-44 bg-white text-[#4e4b66] shadow-sm"
                 type="button"
               >
                 <img src="/icon_facebook.svg" alt="icon_facebook" />
@@ -163,7 +176,8 @@ function RegisterPage() {
 
 /**
  * Digunakan untuk memproses list error validari input password
- * @param {string[]} props
+ * @param {Object} props
+ * @param {Array} props.data
  */
 function ErrorProcess(props) {
   return (
@@ -176,7 +190,7 @@ function ErrorProcess(props) {
                 <>
                   <span
                     style={{ color: "red" }}
-                    className="font-bold text-sm text-red-600"
+                    className="text-sm font-bold text-red-600"
                     key={idx}
                   >
                     ❌ The password must contain characters !
@@ -189,7 +203,7 @@ function ErrorProcess(props) {
                 <>
                   <span
                     style={{ color: "red" }}
-                    className="font-bold text-sm text-red-600"
+                    className="text-sm font-bold text-red-600"
                     key={idx}
                   >
                     ❌ The password must contain numbers !
@@ -202,7 +216,7 @@ function ErrorProcess(props) {
                 <>
                   <span
                     style={{ color: "red" }}
-                    className="font-bold text-sm text-red-600"
+                    className="text-sm font-bold text-red-600"
                     key={idx}
                   >
                     {`❌ The passwords must contain symbols ' !@#$%^&*/><' `}
@@ -215,7 +229,7 @@ function ErrorProcess(props) {
                 <>
                   <span
                     style={{ color: "red" }}
-                    className="font-bold text-sm text-red-600"
+                    className="text-sm font-bold text-red-600"
                     key={idx}
                   >
                     ❌ The password must contain 8 characters !
@@ -228,7 +242,7 @@ function ErrorProcess(props) {
                 <>
                   <span
                     style={{ color: "red" }}
-                    className="font-bold text-sm text-red-600"
+                    className="text-sm font-bold text-red-600"
                     key={idx}
                   >
                     ❌ The password cannot be empty !

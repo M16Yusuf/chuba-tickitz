@@ -11,12 +11,12 @@ function LoginPage() {
   return (
     <div className="bgLoginRegister">
       <section className="relative m-auto flex flex-col items-center">
-        <div className="mt-5 m-auto w-[25%]">
+        <div className="m-auto mt-5 w-[25%]">
           <img src="/logo-tickitz-white.png" alt="logo Tickitz" />
         </div>
 
         <form>
-          <div className="flex flex-col bg-white rounded-md px-7 self-center w-[480px]">
+          <div className="flex w-[480px] flex-col self-center rounded-md bg-white px-7">
             <div>
               <span>Welcome Back👋</span>
               <p>
@@ -28,7 +28,7 @@ function LoginPage() {
               <br />
               <input
                 type="text"
-                className="w-[400px] h-10 rounded-xs bg-white border-2 border-[#aaaaaa] px-3"
+                className="h-10 w-[400px] rounded-xs border-2 border-[#aaaaaa] bg-white px-3"
                 name="ele_mail"
                 placeholder="Enter your email"
                 id="ele_mail"
@@ -38,7 +38,7 @@ function LoginPage() {
               <label htmlFor="pass"> Password </label>
               <br />
               <input
-                className="w-[400px] h-10 rounded-xs bg-white border-2 border-[#aaaaaa] px-3"
+                className="h-10 w-[400px] rounded-xs border-2 border-[#aaaaaa] bg-white px-3"
                 type="password"
                 name="pass"
                 placeholder="Enter your Passwod"
@@ -52,7 +52,7 @@ function LoginPage() {
             </div>
             <div>
               <button
-                className="bg-blue-700 text-white w-[400px] h-14 rounded-b-sm"
+                className="h-14 w-[400px] rounded-b-sm bg-blue-700 text-white"
                 type="submit"
               >
                 Login
@@ -60,16 +60,16 @@ function LoginPage() {
             </div>
             <div></div>
             <hr className="hr_style" />
-            <div className="flex flex-row justify-between mb-[50px]">
+            <div className="mb-[50px] flex flex-row justify-between">
               <button
-                className="bg-white text-[#4e4b66] w-44 shadow-sm"
+                className="w-44 bg-white text-[#4e4b66] shadow-sm"
                 type="button"
               >
                 <img src="/icon_google.svg" alt="icon_google" />
                 Google
               </button>
               <button
-                className="bg-white text-[#4e4b66] w-44 shadow-sm"
+                className="w-44 bg-white text-[#4e4b66] shadow-sm"
                 type="button"
               >
                 <img src="/icon_facebook.svg" alt="icon_facebook" />
