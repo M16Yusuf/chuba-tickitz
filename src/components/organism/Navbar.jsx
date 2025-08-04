@@ -1,13 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import ListItem from "../atoms/Link/ListItem.jsx";
 import { Link } from "react-router";
+
+import profile_image from "/src/assets/img/profile_image.jpg";
+
+import { DeletePersist } from "/src/components/Auth/LoginPersist.jsx";
 
 /**
  * Navbar Komponen organism, digunakan untuk beberapa page
  */
 function Navbar() {
   const [toggleBurger, setToggleBurger] = useState("hidden");
+  const [isLogin, SetIsLogin] = useState(false);
 
   const ToggleDiv = () => {
     setToggleBurger((prev) =>
@@ -20,6 +25,19 @@ function Navbar() {
     { text: "Movie", route: "/movies" },
     { text: "Buy Ticket", route: "/buyticket" },
   ];
+
+  useEffect(() => {
+    if (localStorage.getItem("koda3:login") == null) {
+      SetIsLogin(false);
+    } else {
+      SetIsLogin(true);
+    }
+  }, []);
+
+  function LogOutClick() {
+    DeletePersist();
+    window.location.reload();
+  }
 
   return (
     <header className="sticky top-0 z-10 w-full bg-white shadow-md">
@@ -35,20 +53,37 @@ function Navbar() {
           })}
         </ul>
 
-        <div className="hidden md:flex md:flex-row md:items-center md:gap-3">
-          <Link
-            className="block rounded-sm border border-blue-700 bg-white p-2.5 text-blue-700"
-            to="/login"
-          >
-            SignIn
-          </Link>
-          <Link
-            className="block rounded-sm bg-blue-700 p-2.5 text-white"
-            to="/register"
-          >
-            Sign Up
-          </Link>
-        </div>
+        {isLogin ? (
+          <div className="hidden md:flex md:flex-row md:items-center md:gap-3">
+            <img
+              className="h-10 w-10 rounded-full"
+              src={profile_image}
+              alt="profile_img"
+            />
+
+            <span
+              onClick={LogOutClick}
+              className="block rounded-sm border border-blue-700 bg-white p-2.5 text-blue-700"
+            >
+              logout
+            </span>
+          </div>
+        ) : (
+          <div className="hidden md:flex md:flex-row md:items-center md:gap-3">
+            <Link
+              className="block rounded-sm border border-blue-700 bg-white p-2.5 text-blue-700"
+              to="/login"
+            >
+              SignIn
+            </Link>
+            <Link
+              className="block rounded-sm bg-blue-700 p-2.5 text-white"
+              to="/register"
+            >
+              Sign Up
+            </Link>
+          </div>
+        )}
 
         {/* Hide hamburger, show when small screen */}
         <div className="block md:hidden" onClick={ToggleDiv}>
@@ -58,6 +93,62 @@ function Navbar() {
 
       {/* this nav will apper only when onclick hamburger only */}
       <ul className={toggleBurger.trim()}>
+        {isLogin ? (
+          <>
+            <li
+              className={
+                "block flex items-center justify-center gap-5 border border-solid border-gray-100 p-3 text-center"
+              }
+            >
+              <img
+                className="h-10 w-10 rounded-full"
+                src={profile_image}
+                alt="profile_img"
+              />
+              <span>Muhammad Yusuf</span>
+            </li>
+            <li
+              className={
+                "block border border-solid border-gray-100 p-3 text-center"
+              }
+            >
+              <span
+                onClick={LogOutClick}
+                className="block rounded-sm border border-blue-700 bg-white p-2.5 text-blue-700"
+              >
+                logout
+              </span>
+            </li>
+          </>
+        ) : (
+          <>
+            <li
+              className={
+                "block border border-solid border-gray-100 p-3 text-center"
+              }
+            >
+              <Link
+                className="block rounded-sm border border-blue-700 bg-white p-2.5 text-blue-700"
+                to="/login"
+              >
+                SignIn
+              </Link>
+            </li>
+            <li
+              className={
+                "block border border-solid border-gray-100 p-3 text-center"
+              }
+            >
+              <Link
+                className="block rounded-sm bg-blue-700 p-2.5 text-white"
+                to="/register"
+              >
+                Sign Up
+              </Link>
+            </li>
+          </>
+        )}
+
         {navBtn.map((nav, idx) => {
           return (
             <ListItem
