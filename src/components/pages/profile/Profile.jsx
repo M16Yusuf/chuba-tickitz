@@ -89,7 +89,7 @@ function Profile() {
 
       {/* <!-- hidden --> */}
       <section
-        className="absolute top-[120px] m-[28px] flex hidden flex-col gap-6 rounded-xl bg-white p-4 md:static md:flex md:flex-col md:gap-5 md:bg-[rgb(0,0,0,0)]"
+        className="absolute top-[120px] m-[28px] hidden flex-col gap-6 rounded-xl bg-white p-4 md:static md:flex md:flex-col md:gap-5 md:bg-[rgb(0,0,0,0)]"
         id="section-account-seting"
       >
         {/* <!-- hide when small screen --> */}
