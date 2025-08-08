@@ -41,7 +41,7 @@ function Navbar() {
 
   return (
     <header className="sticky top-0 z-10 w-full bg-white shadow-md">
-      <nav className="md:w-max-custom-max-main bg-white-500 flex w-full items-center justify-between p-6 md:justify-around md:justify-self-center">
+      <nav className="w-c bg-white-500 flex w-full items-center justify-between p-6 md:max-w-[1440px] md:justify-around md:justify-self-center">
         <img
           className="h-9 w-24 sm:h-12 sm:w-32"
           src="/logo-blue_tickitz.svg"
@@ -97,7 +97,7 @@ function Navbar() {
           <>
             <li
               className={
-                "block flex items-center justify-center gap-5 border border-solid border-gray-100 p-3 text-center"
+                "flex items-center justify-center gap-5 border border-solid border-gray-100 p-3 text-center"
               }
             >
               <img

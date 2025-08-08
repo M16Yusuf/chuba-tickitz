@@ -1,8 +1,8 @@
 function Footer() {
   return (
-    <main className="md:max-w-custom-max-main w-full p-5 md:justify-self-center md:p-20">
-      <footer className="">
-        <div className="flex flex-col gap-7 md:flex-row md:items-start md:justify-around">
+    <main className="w-full p-5 md:justify-self-center md:p-20">
+      <footer className="flex flex-col justify-self-center md:max-w-[1440px]">
+        <div className="flex flex-col gap-20 md:flex-row md:items-start md:justify-around">
           <div>
             <img
               className="md:w-48"
