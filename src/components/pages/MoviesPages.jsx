@@ -2,6 +2,8 @@ import React, { Fragment, useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useSearchParams } from "react-router";
 
+import CardMovie from "./../organism/CardMovie";
+
 function MoviesPages() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -49,8 +51,8 @@ function MoviesPages() {
             title: title,
             description: overview,
             release_date: firts_air_date,
-            backdrop: `https://image.tmdb.org/t/p/w500${backdrop_path}`,
-            poster: `https://image.tmdb.org/t/p/w500${poster_path}`,
+            backdrop: backdrop_path,
+            poster: poster_path,
             // genre_ids = []
             genres: genre_ids.map((ele_map) => {
               // finding genre_id[i] = resultGenres
@@ -80,7 +82,7 @@ function MoviesPages() {
         <div role="status" className="flex flex-row justify-center">
           <svg
             aria-hidden="true"
-            class="h-[400px] w-[400px] animate-spin fill-blue-600 text-gray-200 dark:text-gray-600"
+            className="h-[400px] w-[400px] animate-spin fill-blue-600 text-gray-200 dark:text-gray-600"
             viewBox="0 0 100 101"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -94,7 +96,7 @@ function MoviesPages() {
               fill="currentFill"
             />
           </svg>
-          <span class="sr-only">Loading...</span>
+          <span className="sr-only">Loading...</span>
         </div>
       )}
       {!isLoading && Object.keys(data).length > 0 && (
@@ -156,52 +158,12 @@ function MoviesPages() {
 
             <div className="flex w-full flex-row overflow-x-scroll">
               <div
-                className="grid w-full grid-cols-2 gap-5 self-center overflow-x-scroll md:max-w-[1400px] md:grid-cols-4"
+                className="grid w-full grid-cols-2 gap-1 self-center overflow-x-scroll md:max-w-[1400px] md:grid-cols-4 md:gap-5"
                 id="content-area"
               >
                 {/* content  */}
                 {data.map((itemMovie) => {
-                  return (
-                    <div className="flex flex-col gap-4" key={itemMovie.id}>
-                      <div className="group relative rounded-md md:max-h-[405px] md:max-w-[264px]">
-                        <img
-                          className="h-full w-full rounded-md bg-cover"
-                          src={itemMovie.poster}
-                          alt={itemMovie.title}
-                        />
-
-                        <div className="absolute inset-0 hidden flex-col justify-center gap-5 rounded-md bg-[rgb(0,0,0,0.8)] group-hover:flex">
-                          <Link
-                            to={`/movies/details/${itemMovie.id}`}
-                            className="flex h-12 w-44 items-center justify-center self-center rounded-md border border-white text-white hover:shadow-lg hover:shadow-white"
-                          >
-                            Details
-                          </Link>
-                          <span className="bg-blue-primary flex h-12 w-44 items-center justify-center self-center rounded-md text-white transition-shadow hover:shadow-lg hover:shadow-blue-700">
-                            Buy Ticket
-                          </span>
-                        </div>
-                      </div>
-                      <Link
-                        to={`/movies/details/${itemMovie.id}`}
-                        className="text-2xl font-bold"
-                      >
-                        {itemMovie.title}
-                      </Link>
-                      <div className="flex flex-row flex-wrap gap-5">
-                        {itemMovie.genres.map((itemGenre, idx) => {
-                          return (
-                            <a
-                              className="inline-block rounded-md bg-[#A0A3BD1A] px-4 py-2 text-[#A0A3BD] transition hover:bg-blue-700 hover:text-white"
-                              key={idx}
-                            >
-                              {itemGenre}
-                            </a>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  );
+                  return <CardMovie itemMovie={itemMovie} key={itemMovie.id} />;
                 })}
                 {/* end content  */}
               </div>

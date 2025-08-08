@@ -2,6 +2,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 
+import CardMovie from "./../organism/CardMovie";
+
 function HomePages() {
   const [airing, setAiring] = useState([]);
   const [camSoon, setCamSoon] = useState([]);
@@ -71,7 +73,7 @@ function HomePages() {
   }, []);
 
   return (
-    <main className="md:max-w-custom-max-main w-full p-3 md:justify-self-center md:p-20">
+    <main className="w-full p-3 md:max-w-[1440px] md:justify-self-center md:p-20">
       <section className="flex flex-col gap-5 md:flex-row md:justify-center">
         <div className="hero-text my-7 flex flex-col items-center justify-center gap-4 md:w-[580px] md:items-start">
           <span className="text-center text-[18px] font-bold text-blue-700">
@@ -145,49 +147,9 @@ function HomePages() {
         <p className="text-center text-3xl font-light">
           Exciting Movies That Should Be <br /> Watched Today
         </p>
-        <div className="flex w-full flex-row gap-6 overflow-x-scroll">
+        <div className="flex w-full flex-row gap-6 overflow-x-scroll md:justify-center">
           {airing.map((itemMovie) => {
-            return (
-              <div className="flex max-w-2xs flex-col gap-4" key={itemMovie.id}>
-                <div className="group relative max-w-[264px]">
-                  <img
-                    className="h-full w-full rounded-md bg-cover"
-                    src={`${import.meta.env.VITE_PREFIX_IMG_TMDB}/${itemMovie.poster}`}
-                    alt={itemMovie.title}
-                  />
-                  <div className="absolute inset-0 hidden flex-col justify-center gap-5 rounded-md bg-[rgb(0,0,0,0.8)] group-hover:flex">
-                    <Link
-                      to={`/movies/details/${itemMovie.id}`}
-                      className="flex h-12 w-44 items-center justify-center self-center rounded-md border border-white text-white hover:shadow-lg hover:shadow-white"
-                    >
-                      Details
-                    </Link>
-                    <span className="bg-blue-primary flex h-12 w-44 items-center justify-center self-center rounded-md text-white transition-shadow hover:shadow-lg hover:shadow-blue-700">
-                      Buy Ticket
-                    </span>
-                  </div>
-                </div>
-
-                <Link
-                  to={`/movies/details/${itemMovie.id}`}
-                  className="text-2xl font-bold"
-                >
-                  {itemMovie.title}
-                </Link>
-                <div className="flex flex-row flex-wrap gap-1">
-                  {itemMovie.genres.map((itemGenre, idx) => {
-                    return (
-                      <a
-                        className="bg-label-genre text-secondary p-1.1 block rounded-[20px]"
-                        key={idx}
-                      >
-                        {itemGenre}
-                      </a>
-                    );
-                  })}
-                </div>
-              </div>
-            );
+            return <CardMovie key={itemMovie.id} itemMovie={itemMovie} />;
           })}
         </div>
 
@@ -219,50 +181,9 @@ function HomePages() {
           </div>
         </div>
 
-        <div className="flex w-full flex-row gap-6 overflow-x-scroll">
+        <div className="flex w-full flex-row gap-6 overflow-x-scroll md:justify-center">
           {camSoon.map((itemMovie) => {
-            return (
-              <div className="flex max-w-2xs flex-col gap-4" key={itemMovie.id}>
-                <div className="group relative max-h-[405px] max-w-[264px]">
-                  <img
-                    className="h-full w-full rounded-md bg-cover"
-                    src={`${import.meta.env.VITE_PREFIX_IMG_TMDB}/${itemMovie.poster}`}
-                    alt={itemMovie.title}
-                  />
-
-                  <div className="absolute inset-0 hidden flex-col justify-center gap-5 rounded-md bg-[rgb(0,0,0,0.8)] group-hover:flex">
-                    <Link
-                      to={`/movies/details/${itemMovie.id}`}
-                      className="flex h-12 w-44 items-center justify-center self-center rounded-md border border-white text-white hover:shadow-lg hover:shadow-white"
-                    >
-                      Details
-                    </Link>
-                    <span className="bg-blue-primary flex h-12 w-44 items-center justify-center self-center rounded-md text-white transition-shadow hover:shadow-lg hover:shadow-blue-700">
-                      Buy Ticket
-                    </span>
-                  </div>
-                </div>
-
-                <Link
-                  to={`/movies/details/${itemMovie.id}`}
-                  className="text-2xl font-bold"
-                >
-                  {itemMovie.title}
-                </Link>
-                <div className="flex flex-row flex-wrap gap-1">
-                  {itemMovie.genres.map((itemGenre, idx) => {
-                    return (
-                      <a
-                        className="bg-label-genre text-secondary block rounded-[20px] p-[6px]"
-                        key={idx}
-                      >
-                        {itemGenre}
-                      </a>
-                    );
-                  })}
-                </div>
-              </div>
-            );
+            return <CardMovie key={itemMovie.id} itemMovie={itemMovie} />;
           })}
         </div>
       </section>
