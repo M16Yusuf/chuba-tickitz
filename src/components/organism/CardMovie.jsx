@@ -2,7 +2,7 @@ import { Link } from "react-router";
 
 function CardMovie({ itemMovie }) {
   return (
-    <div className="flex max-w-2xs flex-col gap-4" key={itemMovie.id}>
+    <div className="flex max-w-[264px] flex-col gap-4" key={itemMovie.id}>
       <div className="group relative w-[240px] md:w-[264px]">
         <img
           className="h-[369px] rounded-md bg-cover md:h-[405px]"
@@ -24,7 +24,7 @@ function CardMovie({ itemMovie }) {
 
       <Link
         to={`/movies/details/${itemMovie.id}`}
-        className="text-2xl font-bold"
+        className="text-lg font-bold md:text-2xl"
       >
         {itemMovie.title}
       </Link>
