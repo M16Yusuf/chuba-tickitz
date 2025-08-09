@@ -1,6 +1,6 @@
 function Footer() {
   return (
-    <main className="w-full p-5 md:justify-self-center md:p-20">
+    <main className="w-full p-5 md:justify-self-center md:px-20 md:py-2">
       <footer className="flex flex-col justify-self-center md:max-w-[1440px]">
         <div className="flex flex-col gap-20 md:flex-row md:items-start md:justify-around">
           <div>

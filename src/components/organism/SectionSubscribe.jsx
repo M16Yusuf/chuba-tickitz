@@ -2,7 +2,7 @@ import React from "react";
 
 function SectionSubscribe() {
   return (
-    <main className="w-full p-5 md:max-w-[1440px] md:justify-self-center md:p-20">
+    <main className="w-full p-5 md:max-w-[1440px] md:justify-self-center md:px-20 md:py-10">
       <section className="relative flex flex-col overflow-hidden rounded-3xl bg-blue-700 p-5 py-20">
         <span className="text-center text-3xl font-normal text-white">
           Subscribe to our newsletter
