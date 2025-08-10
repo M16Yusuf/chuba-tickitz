@@ -11,14 +11,8 @@ import { DeletePersist } from "/src/components/Auth/LoginPersist.jsx";
  * Navbar Komponen organism, digunakan untuk beberapa page
  */
 function Navbar() {
-  const [toggleBurger, setToggleBurger] = useState("hidden");
+  const [toggleBurger, setToggleBurger] = useState(false);
   const [isLogin, SetIsLogin] = useState(false);
-
-  const ToggleDiv = () => {
-    setToggleBurger((prev) =>
-      prev.includes("hidden") ? prev.replace("hidden", "") : `${prev} hidden`,
-    );
-  };
 
   const navBtn = [
     { text: "Home", route: "/home" },
@@ -54,19 +48,15 @@ function Navbar() {
         </ul>
 
         {isLogin ? (
-          <div className="hidden md:flex md:flex-row md:items-center md:gap-3">
+          <div
+            className="hidden md:flex md:flex-row md:items-center md:gap-3"
+            onClick={() => setToggleBurger(!toggleBurger)}
+          >
             <img
               className="h-10 w-10 rounded-full"
               src={profile_image}
               alt="profile_img"
             />
-
-            <span
-              onClick={LogOutClick}
-              className="block rounded-sm border border-blue-700 bg-white p-2.5 text-blue-700"
-            >
-              logout
-            </span>
           </div>
         ) : (
           <div className="hidden md:flex md:flex-row md:items-center md:gap-3">
@@ -86,13 +76,18 @@ function Navbar() {
         )}
 
         {/* Hide hamburger, show when small screen */}
-        <div className="block md:hidden" onClick={ToggleDiv}>
+        <div
+          className="block md:hidden"
+          onClick={() => setToggleBurger(!toggleBurger)}
+        >
           <img src="/icon-hamburger-menu.svg" alt="hamburger" />
         </div>
       </nav>
 
       {/* this nav will apper only when onclick hamburger only */}
-      <ul className={toggleBurger.trim()}>
+      <ul
+        className={`${!toggleBurger && "hidden"} bg-white md:fixed md:right-52 md:w-2xs md:shadow-md`}
+      >
         {isLogin ? (
           <>
             <Link
@@ -110,13 +105,16 @@ function Navbar() {
             </Link>
             <li
               className={
-                "block border border-solid border-gray-100 p-3 text-center"
+                "flex cursor-pointer flex-row gap-2.5 border border-solid border-gray-100 p-3"
               }
+              onClick={LogOutClick}
             >
-              <span
-                onClick={LogOutClick}
-                className="block rounded-sm border border-blue-700 bg-white p-2.5 text-blue-700"
-              >
+              <img
+                className="border-blue-primary h-[45px] w-[45px] rounded-md border"
+                src="/icon-log-out.svg"
+                alt="log-out"
+              />
+              <span className="block w-full rounded-sm border border-blue-700 bg-white p-2.5 text-center text-blue-700">
                 logout
               </span>
             </li>
