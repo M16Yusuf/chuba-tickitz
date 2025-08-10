@@ -14,11 +14,17 @@ function CardHistory({ dataHistory }) {
     }
   }
 
+  function isPasDate(dataDate) {
+    const cleanedString = dataDate.replace(/^.*?,\s*/, "").replace(" - ", " ");
+    const thisdate = new Date(cleanedString);
+
+    const now = new Date();
+    return thisdate < now;
+  }
+
   function dateFromData(getDate) {
     const cleanedString = getDate.replace(/^.*?,\s*/, "").replace(" - ", " ");
     const date = new Date(cleanedString);
-    console.log(getDate);
-    console.log(date);
 
     const day = date.getDate();
     const month = date.toLocaleString("id-ID", { month: "long" });
@@ -26,12 +32,18 @@ function CardHistory({ dataHistory }) {
     return `${day} ${month} ${year}`;
   }
 
-  function isPasDate(dataDate) {
-    const cleanedString = dataDate.replace(/^.*?,\s*/, "").replace(" - ", " ");
-    const thisdate = new Date(cleanedString);
+  function timeFromData(getData) {
+    const cleanedString = getData.replace(/^.*?,\s*/, "").replace(" - ", " ");
+    const date = new Date(cleanedString);
 
-    const now = new Date();
-    return thisdate < now;
+    // const time = date.toLocaleTimeString([], {
+    //   hour: "2-digit",
+    //   minute: "2-digit",
+    // });
+
+    const time = date.toLocaleTimeString("en-US");
+
+    return time;
   }
 
   return (
@@ -88,7 +100,7 @@ function CardHistory({ dataHistory }) {
                 <div className="flex flex-col">
                   <span className="text-label text-[12px]">Time</span>
                   <span className="text-sm font-semibold">
-                    {dataHistory.price}
+                    {timeFromData(dataHistory.date)}
                   </span>
                 </div>
                 <div className="flex flex-col">
