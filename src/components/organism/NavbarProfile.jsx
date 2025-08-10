@@ -99,6 +99,19 @@ function NavbarProfile() {
           </span>
         </div>
         <Link
+          to={"/admin/dashboard"}
+          className={
+            "flex items-center justify-center gap-5 border border-solid border-gray-100 p-3 text-center"
+          }
+        >
+          <img
+            className="h-10 w-10 rounded-full"
+            src={profile_image}
+            alt="profile_img"
+          />
+          <span>Admin : Muhammad Yusuf</span>
+        </Link>
+        <Link
           className="block border border-solid border-gray-100 p-3 text-center"
           to={"/home"}
         >
