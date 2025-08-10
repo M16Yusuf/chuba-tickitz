@@ -1,80 +1,74 @@
-import React, { Fragment, useEffect, useState } from "react";
-import axios from "axios";
-import { Link, useSearchParams } from "react-router";
+import { Fragment, useEffect, useState } from "react";
+import { useSearchParams } from "react-router";
 
 import CardMovie from "./../organism/CardMovie";
+import { useDispatch, useSelector } from "react-redux";
+import { movieActions } from "../../redux/slice/movieSlice";
 
 function MoviesPages() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams({ page: 1 });
+  const [category, setCategory] = useState("now_playing");
 
+  const dispatch = useDispatch();
+  const movieState = useSelector((state) => state.movies);
+
+  // pagination and useSearchparam
   useEffect(() => {
-    (async function () {
-      try {
-        setIsLoading(true);
-        const url_movies = `${import.meta.env.VITE_TMDB_API_URL}/movie/popular?${searchParams.toString()}&language=en-US&include_adult=false`;
-        const url_genre = `${import.meta.env.VITE_TMDB_API_URL}/genre/movie/list?language=en`;
-        const options = {
-          method: "GET",
-          headers: {
-            accept: "application/json",
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhODI1ZDA0YzhjNTY0YTdjYjA5NTMwNDRjYzM5YjJlZiIsIm5iZiI6MTc1MzQ1NzU3NS4xNzEsInN1YiI6IjY4ODNhM2E3Y2Y3MTI2Y2Q1YWY3N2Y5YSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.73DfZA71E3BQa-8f5cgdQJlHUWC0uKt_s_wx9b4gMaM",
-          },
-        };
+    setIsLoading(true);
+    dispatch(
+      movieActions.getMovieThunk({
+        url: `${import.meta.env.VITE_TMDB_API_URL}/movie/${category}?${searchParams.toString()}&language=en-US`,
+      }),
+    );
 
-        const responMovie = await axios.request(url_movies, options);
-        const responGenre = await axios.request(url_genre, options);
+    let newmovie = [];
+    newmovie = movieState.movies.map(
+      ({ id, title, poster_path, genre_ids }) => ({
+        id: id,
+        title: title,
+        poster: poster_path,
+        genres: genre_ids.map((genre_id) => {
+          const genreMatch = movieState.genres.find(
+            ({ id }) => id === genre_id,
+          );
+          return genreMatch != undefined ? genreMatch.name : "unknown";
+        }),
+      }),
+    );
+    setData(newmovie);
 
-        const {
-          data: { results: resultMovies },
-        } = responMovie;
-        const {
-          data: { genres: resultGenres },
-        } = responGenre;
+    setIsLoading(false);
+  }, [searchParams, category]);
 
-        let newData = [];
-        // console.log(resultMovies);
+  // funcition onclick genre
+  function genreOnclick(genre_id) {
+    setIsLoading(true);
+    dispatch(
+      movieActions.getMovieThunk({
+        url: `${import.meta.env.VITE_TMDB_API_URL}/discover/movie?${searchParams.toString()}&language=en-US&with_genres=${genre_id}`,
+      }),
+    );
 
-        newData = resultMovies.map(
-          ({
-            id,
-            title,
-            overview,
-            firts_air_date,
-            backdrop_path,
-            poster_path,
-            genre_ids,
-          }) => ({
-            id: id,
-            title: title,
-            description: overview,
-            release_date: firts_air_date,
-            backdrop: backdrop_path,
-            poster: poster_path,
-            // genre_ids = []
-            genres: genre_ids.map((ele_map) => {
-              // finding genre_id[i] = resultGenres
-              const genreMatch = resultGenres.find(({ id }) => id === ele_map);
-              //if genre_id not match with any GenreList -> return unknown
-              if (genreMatch == undefined) {
-                return "unknown";
-              }
-              let temp = genreMatch.name;
-              return temp;
-            }),
-          }),
-        );
-
-        console.log(newData);
-        setData(newData);
-        setIsLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, [searchParams]);
+    let newmovie = [];
+    newmovie = movieState.movies.map(
+      ({ id, title, poster_path, genre_ids }) => ({
+        id: id,
+        title: title,
+        poster: poster_path,
+        genres: genre_ids.map((genre_id) => {
+          const genreMatch = movieState.genres.find(
+            ({ id }) => id === genre_id,
+          );
+          return genreMatch != undefined ? genreMatch.name : "unknown";
+        }),
+      }),
+    );
+    setData(newmovie);
+    setIsLoading(false);
+  }
+  console.log(category);
 
   return (
     <Fragment>
@@ -101,7 +95,7 @@ function MoviesPages() {
       )}
       {!isLoading && Object.keys(data).length > 0 && (
         <>
-          <section className="relative h-[450px] p-5 md:p-28">
+          <section className="relative h-[450px] w-full p-5 md:p-28">
             <img
               className="absolute inset-0 h-full w-full object-cover"
               src="/bg-avenger.png"
@@ -122,7 +116,35 @@ function MoviesPages() {
             </div>
           </section>
 
-          <main className="md:max-w-custom-max-main w-full p-3 md:justify-self-center md:p-20">
+          <main className="w-full p-3 md:max-w-[1440px] md:justify-self-center md:p-20">
+            {/* category selector */}
+            <div className="flex flex-row gap-5">
+              <span
+                onClick={() => setCategory("now_playing")}
+                className={`${category == "now_playing" && "border-blue-primary border-b-4 px-1.5"} cursor-pointer`}
+              >
+                Now Playing
+              </span>
+              <span
+                onClick={() => setCategory("popular")}
+                className={`${category == "popular" && "border-blue-primary border-b-4 px-1.5"} cursor-pointer`}
+              >
+                Popular
+              </span>
+              <span
+                onClick={() => setCategory("top_rated")}
+                className={`${category == "top_rated" && "border-blue-primary border-b-4 px-1.5"} cursor-pointer`}
+              >
+                Top Rated
+              </span>
+              <span
+                onClick={() => setCategory("upcoming")}
+                className={`${category == "upcoming" && "border-blue-primary border-b-4 px-1.5"} cursor-pointer`}
+              >
+                Upcoming
+              </span>
+            </div>
+            {/* search film? */}
             <div className="flex flex-col pt-2.5 md:flex-row">
               <div className="event">
                 <label className="m-5 text-base font-semibold">
@@ -137,28 +159,28 @@ function MoviesPages() {
               <div className="filter">
                 <label className="m-5 text-base font-semibold"> Filter </label>
                 <div className="flex flex-row flex-wrap gap-3">
-                  <span className="bg-label-genre text-label hover:bg-blue-primary inline-block rounded-md p-1.5 transition hover:text-white">
-                    Thriller
-                  </span>
-                  <span className="bg-label-genre text-label hover:bg-blue-primary inline-block rounded-md p-1.5 transition hover:text-white">
-                    Horror
-                  </span>
-                  <span className="bg-label-genre text-label hover:bg-blue-primary inline-block rounded-md p-1.5 transition hover:text-white">
-                    Romantic
-                  </span>
-                  <span className="bg-label-genre text-label hover:bg-blue-primary inline-block rounded-md p-1.5 transition hover:text-white">
-                    Adventure
-                  </span>
-                  <span className="bg-label-genre text-label hover:bg-blue-primary inline-block rounded-md p-1.5 transition hover:text-white">
-                    Sci-Fi
-                  </span>
+                  {movieState.genres.length > 0 &&
+                    movieState.genres.map((itemGenre) => {
+                      return (
+                        <span
+                          className="bg-label-genre text-label hover:bg-blue-primary inline-block rounded-md p-1.5 hover:text-white"
+                          key={itemGenre.id}
+                          onClick={() => {
+                            genreOnclick(itemGenre.id);
+                          }}
+                        >
+                          {itemGenre.name}
+                        </span>
+                      );
+                    })}
                 </div>
               </div>
             </div>
 
-            <div className="flex w-full flex-row overflow-x-scroll">
+            {/* movie section */}
+            <div className="w-full overflow-x-scroll xl:justify-items-center">
               <div
-                className="grid w-full grid-cols-2 gap-1 self-center overflow-x-scroll md:max-w-[1400px] md:grid-cols-4 md:gap-5"
+                className="grid w-max grid-cols-4 gap-1 px-1 py-2 md:gap-5"
                 id="content-area"
               >
                 {/* content  */}
@@ -169,12 +191,12 @@ function MoviesPages() {
               </div>
             </div>
 
-            <section className="m-5 mt-2.5 flex flex-row justify-self-center">
+            <section className="m-5 mt-2.5 flex flex-row gap-5 justify-self-center">
               {[1, 2, 3, 4, 5].map((pageNumber, idx) => {
                 return (
                   <div
                     key={idx}
-                    className="inline-block rounded-full bg-[#A0A3BD1A] px-4 py-2 text-[#A0A3BD] transition hover:bg-blue-700 hover:text-white"
+                    className={`${parseInt(searchParams.get("page")) == pageNumber && "bg-blue-700 text-white"} inline-block rounded-full bg-[#A0A3BD1A] px-4 py-2 text-[#A0A3BD]`}
                     onClick={() => {
                       // logika paginasi
                       setSearchParams((searchParams) => {
