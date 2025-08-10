@@ -95,7 +95,8 @@ function Navbar() {
       <ul className={toggleBurger.trim()}>
         {isLogin ? (
           <>
-            <li
+            <Link
+              to={"/profile"}
               className={
                 "flex items-center justify-center gap-5 border border-solid border-gray-100 p-3 text-center"
               }
@@ -106,7 +107,7 @@ function Navbar() {
                 alt="profile_img"
               />
               <span>Muhammad Yusuf</span>
-            </li>
+            </Link>
             <li
               className={
                 "block border border-solid border-gray-100 p-3 text-center"
