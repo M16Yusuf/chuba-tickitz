@@ -11,10 +11,17 @@ import BuyTicket from "./components/pages/BuyTicket.jsx";
 import MovieDetails from "./components/pages/MovieDetails.jsx";
 import ProfileHome from "./components/pages/profile/Profile.jsx";
 
+// admin page
+import DashboardPage from "./components/pages/admin/DashboardPage.jsx";
+import AddMoviePage from "./components/pages/admin/AddMovie.jsx";
+
 // component layout
 import LayoutHome from "./components/layout/LayoutHome.jsx";
 import LayoutMovie from "./components/layout/LayoutMovie.jsx";
 import LayoutProfile from "./components/layout/LayoutProfile.jsx";
+import LayoutAdmin from "./components/layout/LayoutAdmin.jsx";
+
+// private route
 import PrivateRoute from "./components/Auth/PrivateRoute.jsx";
 
 function Router() {
@@ -48,6 +55,11 @@ function Router() {
               </PrivateRoute>
             }
           />
+        </Route>
+
+        <Route path="admin" element={<LayoutAdmin />}>
+          <Route index path="dashboard" element={<DashboardPage />} />
+          <Route path="addmovie" element={<AddMoviePage />} />
         </Route>
       </Routes>
     </BrowserRouter>
