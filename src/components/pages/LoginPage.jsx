@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import { useState } from "react";
 
 import { Link } from "react-router";
 
@@ -8,78 +8,96 @@ import { Link } from "react-router";
 // import tickitzWhite from "../../../public/logo/tickitz-white.png";
 
 function LoginPage() {
+  const [toggleEye, setToggleEye] = useState(false);
+
   return (
-    <div className="bgLoginRegister">
-      <section className="relative m-auto flex flex-col items-center">
+    <main className="fixed h-screen w-screen overflow-y-auto bg-black/60 bg-[url('/bg-avenger.png')] bg-cover bg-fixed bg-center bg-no-repeat bg-blend-overlay">
+      <section className="flex flex-col items-center">
         <div className="m-auto mt-5 w-[25%]">
           <img src="/logo-tickitz-white.png" alt="logo Tickitz" />
         </div>
+        <div className="m-5 flex max-w-[480px] flex-col gap-5 self-center rounded-md bg-white p-5 py-10 md:p-10">
+          <div>
+            <span>Welcome Back👋</span>
+            <p className="text-secondary">
+              Sign in with your data that you entered during your registration
+            </p>
+          </div>
 
-        <form>
-          <div className="flex w-[480px] flex-col self-center rounded-md bg-white px-7">
+          <form className="flex flex-col gap-5">
             <div>
-              <span>Welcome Back👋</span>
-              <p>
-                Sign in with your data that you entered during your registration
-              </p>
-            </div>
-            <div>
-              <label htmlFor="ele_mail"> Email </label>
-              <br />
+              <label htmlFor="ele_mail" className="text-title-info">
+                Email
+              </label>
               <input
                 type="text"
-                className="h-10 w-[400px] rounded-xs border-2 border-[#aaaaaa] bg-white px-3"
+                className="h-10 w-full rounded-xs border-2 border-[#aaaaaa] bg-white px-3"
                 name="ele_mail"
                 placeholder="Enter your email"
                 id="ele_mail"
               />
             </div>
             <div>
-              <label htmlFor="pass"> Password </label>
-              <br />
-              <input
-                className="h-10 w-[400px] rounded-xs border-2 border-[#aaaaaa] bg-white px-3"
-                type="password"
-                name="pass"
-                placeholder="Enter your Passwod"
-                id="pass"
-              />
+              <label htmlFor="pass" className="text-title-info">
+                Password
+              </label>
+              <div className="flex w-full flex-row gap-0 rounded-xs border-2 border-[#aaaaaa] bg-white">
+                <input
+                  className="h-10 w-full px-3"
+                  type={toggleEye ? "text" : "password"}
+                  name="pass"
+                  placeholder="Enter your Passwod"
+                  id="pass"
+                />
+                <img
+                  className="cursor-pointer p-1.5"
+                  src={toggleEye ? "/icon-eye-off.svg" : "/icon-eye.svg"}
+                  alt="eye"
+                  onClick={() => setToggleEye(!toggleEye)}
+                />
+              </div>
             </div>
-            <div className="login">
-              <Link className="text-blue-700" to="/register">
+            <div className="flex justify-end">
+              <Link className="text-end text-blue-700" to="/register">
                 Forgot your password?
               </Link>
             </div>
             <div>
               <button
-                className="h-14 w-[400px] rounded-b-sm bg-blue-700 text-white"
+                className="h-14 w-full rounded-b-sm bg-blue-700 text-white"
                 type="submit"
               >
                 Login
               </button>
             </div>
-            <div></div>
-            <hr className="hr_style" />
-            <div className="mb-[50px] flex flex-row justify-between">
-              <button
-                className="w-44 bg-white text-[#4e4b66] shadow-sm"
-                type="button"
-              >
-                <img src="/icon_google.svg" alt="icon_google" />
-                Google
-              </button>
-              <button
-                className="w-44 bg-white text-[#4e4b66] shadow-sm"
-                type="button"
-              >
-                <img src="/icon_facebook.svg" alt="icon_facebook" />
-                Facebook
-              </button>
-            </div>
+          </form>
+
+          {/* horizontal rule with or text */}
+          <div class="relative flex items-center py-2.5">
+            <div class="flex-grow border-t border-gray-400"></div>
+            <span class="mx-4 flex-shrink text-[12px] text-gray-400">Or</span>
+            <div class="flex-grow border-t border-gray-400"></div>
           </div>
-        </form>
+
+          <div className="flex flex-row justify-center gap-5 md:justify-between">
+            <button
+              className="flex flex-row gap-2.5 bg-white p-5 shadow-sm md:w-full"
+              type="button"
+            >
+              <img src="/icon_google.svg" alt="icon_google" />
+              <span className="text-title-info hidden md:block">Google</span>
+            </button>
+            <button
+              className="flex flex-row gap-2.5 bg-white p-5 shadow-sm md:w-full"
+              type="button"
+            >
+              <img src="/icon_facebook.svg" alt="icon_facebook" />
+              <span className="text-title-info hidden md:block">Facebook</span>
+            </button>
+          </div>
+        </div>
       </section>
-    </div>
+    </main>
   );
 }
 

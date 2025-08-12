@@ -7,6 +7,7 @@ import { LoginPersist } from "/src/components/Auth/LoginPersist.jsx";
 function RegisterPage() {
   const [error, setError] = useState([]);
   const navigate = useNavigate();
+  const [toggleEye, setToggleEye] = useState(false);
 
   function submitData(event) {
     event.preventDefault();
@@ -80,14 +81,14 @@ function RegisterPage() {
   }
 
   return (
-    <div className="bgLoginRegister">
-      <section className="relative m-auto flex flex-col items-center">
+    <main className="fixed h-screen w-screen overflow-y-auto bg-black/60 bg-[url('/bg-avenger.png')] bg-cover bg-fixed bg-center bg-no-repeat bg-blend-overlay">
+      <section className="flex flex-col items-center">
         <div className="m-auto mt-5 w-[25%]">
           <img src="/logo-tickitz-white.png" alt="logo Tickitz" />
         </div>
 
-        <form onSubmit={submitData}>
-          <div className="flex w-[480px] flex-col gap-4 self-center rounded-md bg-white px-7">
+        <form className="max-w-[480px]" onSubmit={submitData}>
+          <div className="m-5 flex w-full flex-col gap-5 self-center rounded-md bg-white p-5 py-10 md:p-10">
             <div className="step flex flex-row justify-between">
               <div>
                 <div className="h-11 w-11 content-center rounded-full bg-blue-700 text-center text-white">
@@ -108,12 +109,13 @@ function RegisterPage() {
                 Done
               </div>
             </div>
+
             <div>
               <label htmlFor="ele_mail"> Email </label>
               <br />
               <input
                 type="text"
-                className="h-10 w-[400px] rounded-xs border-2 border-[#aaaaaa] bg-white px-3"
+                className="h-10 w-full rounded-xs border-2 border-[#aaaaaa] bg-white px-3"
                 name="ele_mail"
                 placeholder="Enter your email"
                 id="ele_mail"
@@ -121,15 +123,22 @@ function RegisterPage() {
             </div>
             <div className="pass-area">
               <label htmlFor="pass"> Password </label>
-              <br />
-              <input
-                type="password"
-                className="h-10 w-[400px] rounded-xs border-2 border-[#aaaaaa] bg-white px-3"
-                name="pass"
-                placeholder="Enter your Passwod"
-                id="pass"
-                onChange={validationInput}
-              />
+              <div className="flex w-full flex-row gap-0 rounded-xs border-2 border-[#aaaaaa] bg-white">
+                <input
+                  className="h-10 w-full px-3"
+                  type={toggleEye ? "text" : "password"}
+                  name="pass"
+                  placeholder="Enter your Passwod"
+                  id="pass"
+                  onChange={validationInput}
+                />
+                <img
+                  className="cursor-pointer p-1.5"
+                  src={toggleEye ? "/icon-eye-off.svg" : "/icon-eye.svg"}
+                  alt="eye"
+                  onClick={() => setToggleEye(!toggleEye)}
+                />
+              </div>
               <ErrorProcess data={error} />
             </div>
             <div>
@@ -138,39 +147,50 @@ function RegisterPage() {
             </div>
             <div>
               <button
-                className="h-14 w-[400px] rounded-b-sm bg-blue-700 text-white"
+                className="h-14 w-full rounded-b-sm bg-blue-700 text-white"
                 type="submit"
               >
                 Join For Free Now
               </button>
             </div>
+
             <div className="register">
               Already have an account?
               <Link className="text-blue-700" to="/login">
                 Log in
               </Link>
             </div>
-            <hr className="hr_style" />
-            <div>
+
+            {/* horizontal rule with or text */}
+            <div class="relative flex items-center py-2.5">
+              <div class="flex-grow border-t border-gray-400"></div>
+              <span class="mx-4 flex-shrink text-[12px] text-gray-400">Or</span>
+              <div class="flex-grow border-t border-gray-400"></div>
+            </div>
+
+            {/* other login button */}
+            <div className="flex flex-row justify-center gap-5 md:justify-between">
               <button
-                className="w-44 bg-white text-[#4e4b66] shadow-sm"
+                className="flex flex-row gap-2.5 bg-white p-5 shadow-sm md:w-full"
                 type="button"
               >
                 <img src="/icon_google.svg" alt="icon_google" />
-                Google
+                <span className="text-title-info hidden md:block">Google</span>
               </button>
               <button
-                className="w-44 bg-white text-[#4e4b66] shadow-sm"
+                className="flex flex-row gap-2.5 bg-white p-5 shadow-sm md:w-full"
                 type="button"
               >
                 <img src="/icon_facebook.svg" alt="icon_facebook" />
-                Facebook
+                <span className="text-title-info hidden md:block">
+                  Facebook
+                </span>
               </button>
             </div>
           </div>
         </form>
       </section>
-    </div>
+    </main>
   );
 }
 
