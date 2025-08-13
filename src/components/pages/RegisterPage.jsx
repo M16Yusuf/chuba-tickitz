@@ -87,29 +87,29 @@ function RegisterPage() {
           <img src="/logo-tickitz-white.png" alt="logo Tickitz" />
         </div>
 
-        <form className="max-w-[480px]" onSubmit={submitData}>
-          <div className="m-5 flex w-full flex-col gap-5 self-center rounded-md bg-white p-5 py-10 md:p-10">
-            <div className="step flex flex-row justify-between">
-              <div>
-                <div className="h-11 w-11 content-center rounded-full bg-blue-700 text-center text-white">
-                  1
-                </div>
-                Fill Form
+        <div className="m-5 flex max-w-[480px] flex-col gap-5 self-center rounded-md bg-white p-5 py-10 md:w-full md:p-10">
+          <div className="flex w-full flex-row justify-between">
+            <div>
+              <div className="h-11 w-11 content-center rounded-full bg-blue-700 text-center text-white">
+                1
               </div>
-              <div>
-                <div className="h-11 w-11 content-center rounded-full bg-[#a0a3bd] text-center">
-                  2
-                </div>
-                Activate
-              </div>
-              <div>
-                <div className="h-11 w-11 content-center rounded-full bg-[#a0a3bd] text-center">
-                  3
-                </div>
-                Done
-              </div>
+              Fill Form
             </div>
+            <div>
+              <div className="h-11 w-11 content-center rounded-full bg-[#a0a3bd] text-center">
+                2
+              </div>
+              Activate
+            </div>
+            <div>
+              <div className="h-11 w-11 content-center rounded-full bg-[#a0a3bd] text-center">
+                3
+              </div>
+              Done
+            </div>
+          </div>
 
+          <form className="flex flex-col gap-5" onSubmit={submitData}>
             <div>
               <label htmlFor="ele_mail"> Email </label>
               <br />
@@ -153,42 +153,40 @@ function RegisterPage() {
                 Join For Free Now
               </button>
             </div>
+          </form>
 
-            <div className="register">
-              Already have an account?
-              <Link className="text-blue-700" to="/login">
-                Log in
-              </Link>
-            </div>
-
-            {/* horizontal rule with or text */}
-            <div class="relative flex items-center py-2.5">
-              <div class="flex-grow border-t border-gray-400"></div>
-              <span class="mx-4 flex-shrink text-[12px] text-gray-400">Or</span>
-              <div class="flex-grow border-t border-gray-400"></div>
-            </div>
-
-            {/* other login button */}
-            <div className="flex flex-row justify-center gap-5 md:justify-between">
-              <button
-                className="flex flex-row gap-2.5 bg-white p-5 shadow-sm md:w-full"
-                type="button"
-              >
-                <img src="/icon_google.svg" alt="icon_google" />
-                <span className="text-title-info hidden md:block">Google</span>
-              </button>
-              <button
-                className="flex flex-row gap-2.5 bg-white p-5 shadow-sm md:w-full"
-                type="button"
-              >
-                <img src="/icon_facebook.svg" alt="icon_facebook" />
-                <span className="text-title-info hidden md:block">
-                  Facebook
-                </span>
-              </button>
-            </div>
+          <div className="register">
+            Already have an account?
+            <Link className="text-blue-700" to="/login">
+              Log in
+            </Link>
           </div>
-        </form>
+
+          {/* horizontal rule with or text */}
+          <div class="relative flex items-center">
+            <div class="flex-grow border-t border-gray-400"></div>
+            <span class="mx-4 flex-shrink text-[12px] text-gray-400">Or</span>
+            <div class="flex-grow border-t border-gray-400"></div>
+          </div>
+
+          {/* other login button */}
+          <div className="flex flex-row justify-center gap-5 md:justify-between">
+            <button
+              className="flex flex-row gap-2.5 bg-white p-5 shadow-sm md:w-full"
+              type="button"
+            >
+              <img src="/icon_google.svg" alt="icon_google" />
+              <span className="text-title-info hidden md:block">Google</span>
+            </button>
+            <button
+              className="flex flex-row gap-2.5 bg-white p-5 shadow-sm md:w-full"
+              type="button"
+            >
+              <img src="/icon_facebook.svg" alt="icon_facebook" />
+              <span className="text-title-info hidden md:block">Facebook</span>
+            </button>
+          </div>
+        </div>
       </section>
     </main>
   );
