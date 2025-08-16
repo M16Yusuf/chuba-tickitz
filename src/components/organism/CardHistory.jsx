@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 function CardHistory({ dataHistory }) {
-  const [toggleExp, setToggleExp] = useState(false);
+  const [isToggleExp, setToggleExp] = useState(false);
 
   function logoCinema(place) {
     switch (place) {
@@ -47,8 +47,8 @@ function CardHistory({ dataHistory }) {
   }
 
   return (
-    <div className="flex flex-col">
-      <div className="border-background flex flex-col gap-2.5 rounded-t-2xl border-b-1 bg-white p-5 shadow-md md:flex-row-reverse md:justify-between md:rounded-t-3xl">
+    <div className="flex w-full flex-col justify-center">
+      <div className="border-background flex flex-col gap-2.5 rounded-t-2xl border-b-1 bg-white p-5 shadow-md md:w-full md:flex-row-reverse md:justify-between md:rounded-t-3xl">
         <img
           className="w-24"
           src={logoCinema(dataHistory.place)}
@@ -60,28 +60,37 @@ function CardHistory({ dataHistory }) {
         </div>
       </div>
       {/* if ticket active & unpaid */}
-      <div className="border-background flex flex-col rounded-b-2xl border-t-1 bg-white p-5 shadow-md">
+      <div className="border-background flex flex-col rounded-b-2xl border-t-1 bg-white p-5 shadow-md md:w-full">
         <div className="flex flex-col items-center justify-between gap-5 md:flex-row">
           <div className="flex w-full flex-col items-center gap-5 md:flex-row">
             <span
-              className={`${isPasDate(dataHistory.date) ? "text-label bg-[rgba(110,113,145,0.2)]" : "text-active bg-[rgba(0,186,136,0.2)]"} w-full rounded-lg p-2.5 text-center md:w-44`}
+              className={`${isPasDate(dataHistory.date) ? "text-label bg-[rgba(110,113,145,0.2)]" : "text-active bg-[rgba(0,186,136,0.2)]"} w-full rounded-lg p-2.5 text-center md:block md:max-w-44`}
             >
               {`${isPasDate(dataHistory.date) ? "Ticked used" : "Ticket is Active"}`}
             </span>
             <span
-              className={`${dataHistory.is_paid ? "text-blue-primary bg-[rgba(29,78,216,0.2)]" : "text-importan bg-[rgba(232,44,44,0.2)]"} block w-full rounded-lg p-2.5 text-center md:w-44`}
+              className={`${dataHistory.is_paid ? "text-blue-primary bg-[rgba(29,78,216,0.2)]" : "text-importan bg-[rgba(232,44,44,0.2)]"} block w-full rounded-lg p-2.5 text-center md:block md:max-w-44`}
             >
               {dataHistory.is_paid ? "Paid" : "Not paid"}
             </span>
           </div>
-          <span
-            className="text-label block cursor-pointer text-center text-nowrap"
-            onClick={() => setToggleExp(!toggleExp)}
+          <div
+            onClick={() => setToggleExp(!isToggleExp)}
+            className="flex cursor-pointer flex-row"
           >
-            Show Details
-          </span>
+            <span className="text-label block text-center text-nowrap">
+              Show Details
+            </span>
+            <img
+              src="/icon-Forward.svg"
+              className={`${isToggleExp && "rotate-180"} h-8 w-8`}
+              alt="flat-arrow"
+            />
+          </div>
         </div>
-        <div className={`${!toggleExp && "hidden"} mt-5 flex flex-col gap-2.5`}>
+        <div
+          className={`${!isToggleExp && "hidden"} mt-5 flex flex-col gap-2.5`}
+        >
           <div className="text-lg font-bold">Ticket Information</div>
           {dataHistory.is_paid ? (
             <div className="flex flex-col md:flex-row">
@@ -152,7 +161,7 @@ function CardHistory({ dataHistory }) {
                 </span>
                 <span className="text-blue-primary text-lg font-bold">{`$ ${dataHistory.total}`}</span>
               </div>
-              <p className="text-secondary text-[12px] font-normal">
+              <p className="text-secondary text-[12px] font-normal text-wrap">
                 Pay this payment bill before it is due, on{" "}
                 <span className="text-importan">{dataHistory.date}</span>. If
                 the bill has not been paid by the specified time, it will be
@@ -179,12 +188,12 @@ function CardHistory({ dataHistory }) {
           </div>
           <span
             className="text-label block cursor-pointer text-center text-nowrap"
-            onClick={() => setToggleExp(!toggleExp)}
+            onClick={() => setToggleExp(!isToggleExp)}
           >
             Show Details
           </span>
         </div>
-        <div className={`${!toggleExp && "hidden"} mt-5 flex flex-col gap-2.5`}>
+        <div className={`${!isToggleExp && "hidden"} mt-5 flex flex-col gap-2.5`}>
           <div className="text-lg font-bold">Ticket Information</div>
           <div className="flex flex-col justify-between md:flex-row">
             <span className="text-label text-base font-light">

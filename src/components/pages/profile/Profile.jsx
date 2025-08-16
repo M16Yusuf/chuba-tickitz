@@ -45,9 +45,9 @@ function Profile() {
     },
   ];
   return (
-    <>
+    <main className="bg-background w-full justify-self-center md:px-20">
       {/* section navigation switch "detail account" or "order history" on small screen */}
-      <div className="flex w-full flex-row justify-around bg-white shadow-md shadow-black md:hidden">
+      <div className="flex w-full flex-row justify-around bg-white shadow-md md:hidden">
         <span
           className={`${isDetailOrHistory && "border-blue-primary block border-b-2 text-black"} p-4 text-[#AAAAAA]`}
           onClick={() => setDetailOrHistory(true)}
@@ -63,10 +63,10 @@ function Profile() {
       </div>
 
       {/* main contern */}
-      <main className="bg-background h-max justify-center md:flex md:flex-row md:p-5">
+      <main className="h-max items-start md:flex md:flex-row md:p-5">
         {/* aside: profile card section */}
         <aside
-          className={`${!isDetailOrHistory && "hidden"} flex flex-col items-center p-8 md:block md:w-96`}
+          className={`${!isDetailOrHistory && "hidden"} flex flex-col items-center px-4 py-8 md:block md:w-96 md:px-0`}
         >
           <div className="w-full min-w-3xs rounded-t-lg border-b border-gray-200 bg-white p-8 shadow-md">
             <div className="mt-3 flex flex-row justify-between">
@@ -129,10 +129,10 @@ function Profile() {
         ></div>
 
         <section
-          className={`flex flex-col gap-6 p-8 md:m-[28px] md:gap-5 md:p-0`}
+          className={`flex flex-col justify-center gap-6 p-8 md:m-[28px] md:w-full md:gap-5 md:p-0`}
         >
           {/* navigation switch "detail account" or "order history" on big screen */}
-          <div className="hidden md:mb-5 md:flex md:h-max md:max-w-3xl md:flex-row md:rounded-xl md:bg-white md:pl-4 md:shadow-md">
+          <div className="hidden md:mb-5 md:flex md:h-max md:w-full md:flex-row md:rounded-xl md:bg-white md:pl-4 md:shadow-md">
             <span
               className={`${isDetailOrHistory && "border-blue-primary border-b-2 text-black"} block p-4 text-[#AAAAAA]`}
               onClick={() => setDetailOrHistory(true)}
@@ -241,7 +241,7 @@ function Profile() {
 
           {/* section for content order history */}
           <section
-            className={`${isDetailOrHistory && "hidden md:hidden"} flex flex-col gap-7 md:bg-[rgb(0,0,0,0)] md:p-0`}
+            className={`${isDetailOrHistory && "hidden md:hidden"} flex flex-col gap-7 md:w-full md:bg-[rgb(0,0,0,0)] md:p-0`}
           >
             {dummyHistory.length > 0 &&
               dummyHistory.map((history, idx) => {
@@ -250,7 +250,7 @@ function Profile() {
           </section>
         </section>
       </main>
-    </>
+    </main>
   );
 }
 
