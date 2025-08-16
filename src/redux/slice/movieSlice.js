@@ -13,6 +13,7 @@ const initialState = {
 const getMovieThunk = createAsyncThunk(
   "movies/get_data",
   async (urlParam, { rejectWithValue }) => {
+    console.log(urlParam)
     try {
       const responMovies = await axios.request({
         ...urlParam,
@@ -30,8 +31,20 @@ const getMovieThunk = createAsyncThunk(
         }
       });
 
-      const { data: { results: resultMovies }, } = responMovies;
+      // process data before return to extrareducer
+      // process genres, change genre_ids to name
+      const { data: { results: newmovie }, } = responMovies;
       const { data: { genres: resultGenres }, } = responGenres;
+      let resultMovies = [];
+      resultMovies = newmovie.map((movie) => {
+        const { genre_ids, ...rest } = movie;
+        const genres = genre_ids.map((genre_id) => {
+          const genreMatch = resultGenres.find(({ id }) => id === genre_id);
+          return genreMatch != undefined ? genreMatch.name : "unknown";
+        })
+        return { genres, ...rest };
+      });
+
       return { resultMovies, resultGenres };
     } catch (err) {
       return (rejectWithValue(err));
