@@ -1,222 +1,213 @@
 import { Fragment, useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 
-import CardMovie from "./../organism/CardMovie";
 import { useDispatch, useSelector } from "react-redux";
 import { movieActions } from "../../redux/slice/movieSlice";
 
+// component
+import CardMovie from "./../organism/CardMovie";
+import LoadingCircle from "./../organism/LoadingCircle";
+
 function MoviesPages() {
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams({ page: 1 });
-  const [category, setCategory] = useState("now_playing");
+  const [pageNumber, setPageNumber] = useState([1, 2, 3, 4, 5]);
 
   const dispatch = useDispatch();
   const movieState = useSelector((state) => state.movies);
 
   // pagination and useSearchparam
   useEffect(() => {
-    setIsLoading(true);
+    let dataUrl = "";
+    if (searchParams.has("with_genres") && !searchParams.has("query")) {
+      dataUrl = `${import.meta.env.VITE_TMDB_API_URL}/discover/movie?${searchParams.toString()}&language=en-US&include_adult=false`;
+    } else if (!searchParams.has("with_genres") && searchParams.has("query")) {
+      dataUrl = `${import.meta.env.VITE_TMDB_API_URL}/search/movie?${searchParams.toString()}&language=en-US&include_adult=false`;
+    } else if (!searchParams.has("with_genres") && !searchParams.has("query")) {
+      dataUrl = `${import.meta.env.VITE_TMDB_API_URL}/movie/now_playing?$?${searchParams.toString()}&language=en-US&include_adult=false`;
+    }
+
     dispatch(
       movieActions.getMovieThunk({
-        url: `${import.meta.env.VITE_TMDB_API_URL}/movie/${category}?${searchParams.toString()}&language=en-US`,
+        url: dataUrl,
       }),
     );
+  }, [searchParams]);
 
-    let newmovie = [];
-    newmovie = movieState.movies.map(
-      ({ id, title, poster_path, genre_ids }) => ({
-        id: id,
-        title: title,
-        poster: poster_path,
-        genres: genre_ids.map((genre_id) => {
-          const genreMatch = movieState.genres.find(
-            ({ id }) => id === genre_id,
-          );
-          return genreMatch != undefined ? genreMatch.name : "unknown";
-        }),
-      }),
-    );
-    setData(newmovie);
+  function selectGenreClick(genreid) {
+    setSearchParams((param) => {
+      if (param.has("with_genres")) {
+        let current = param
+          .get("with_genres")
+          .split(",")
+          .map((eleArr) => parseInt(eleArr));
 
-    setIsLoading(false);
-  }, [searchParams, category]);
-
-  // funcition onclick genre
-  function genreOnclick(genre_id) {
-    setIsLoading(true);
-    dispatch(
-      movieActions.getMovieThunk({
-        url: `${import.meta.env.VITE_TMDB_API_URL}/discover/movie?${searchParams.toString()}&language=en-US&with_genres=${genre_id}`,
-      }),
-    );
-
-    let newmovie = [];
-    newmovie = movieState.movies.map(
-      ({ id, title, poster_path, genre_ids }) => ({
-        id: id,
-        title: title,
-        poster: poster_path,
-        genres: genre_ids.map((genre_id) => {
-          const genreMatch = movieState.genres.find(
-            ({ id }) => id === genre_id,
-          );
-          return genreMatch != undefined ? genreMatch.name : "unknown";
-        }),
-      }),
-    );
-    setData(newmovie);
-    setIsLoading(false);
+        if (current.includes(genreid)) {
+          if (current.length == 1) {
+            param.delete("with_genres");
+          } else {
+            param.set(
+              "with_genres",
+              current.filter((arrValue) => arrValue != genreid),
+            );
+          }
+        } else {
+          current.push(genreid);
+          param.set("with_genres", current.join());
+        }
+      } else {
+        param.append("with_genres", genreid);
+      }
+      return param;
+    });
   }
-  console.log(category);
+
+  // genre style
+  function selectGenreStyle(genreid) {
+    let data = searchParams.get("with_genres");
+    if (data != null) {
+      data = data.split(",").map((eleArr) => parseInt(eleArr));
+      return data.includes(genreid)
+        ? "bg-blue-primary text-white"
+        : "bg-label-genre text-label";
+    }
+  }
+
+  function querySearch(eve) {
+    let datSearch = eve.target.value;
+    console.log(datSearch);
+    setSearchParams((param) => {
+      if (datSearch === "") {
+        param.delete("query");
+      } else if (param.has("query")) {
+        param.set("query", datSearch);
+      } else {
+        param.append("query", datSearch);
+      }
+      return param;
+    });
+  }
 
   return (
     <Fragment>
-      {isLoading && (
-        <div role="status" className="flex flex-row justify-center">
-          <svg
-            aria-hidden="true"
-            className="h-[400px] w-[400px] animate-spin fill-blue-600 text-gray-200 dark:text-gray-600"
-            viewBox="0 0 100 101"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-              fill="currentColor"
-            />
-            <path
-              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-              fill="currentFill"
-            />
-          </svg>
-          <span className="sr-only">Loading...</span>
+      <section className="relative h-[450px] w-full p-5 md:p-28">
+        <img
+          className="absolute inset-0 h-full w-full object-cover"
+          src="/bg-avenger.png"
+          alt="indicator"
+          id="indicator"
+        />
+
+        <div className="absolute inset-0 bg-[rgb(0,0,0,0.6)]"></div>
+        <div className="absolute flex flex-col">
+          <div className="mb-1.5 text-lg text-white">
+            LIST MOVIE OF THE WEEK
+          </div>
+          <div className="text-5xl text-white">
+            Experience the Magic of <br />
+            Cinema: Book Your Tickets <br />
+            Today
+          </div>
         </div>
-      )}
-      {!isLoading && Object.keys(data).length > 0 && (
-        <>
-          <section className="relative h-[450px] w-full p-5 md:p-28">
-            <img
-              className="absolute inset-0 h-full w-full object-cover"
-              src="/bg-avenger.png"
-              alt="indicator"
-              id="indicator"
+      </section>
+
+      <section className="w-full p-3 md:max-w-[1440px] md:justify-self-center md:p-20">
+        {/* search & filter genre film? */}
+        <div className="flex flex-col pt-2.5 md:flex-row">
+          <div className="event">
+            <label className="m-5 text-base font-semibold">Cari Event</label>
+            <br />
+            <input
+              className="border-label-genre focus:outline-blue-primary focus:ring-blue-primary m-1 w-full border p-2 md:w-[350px]"
+              type="text"
+              onChange={querySearch}
             />
+          </div>
 
-            <div className="absolute inset-0 bg-[rgb(0,0,0,0.6)]"></div>
-            <div className="absolute flex flex-col">
-              <div className="mb-1.5 text-lg text-white">
-                LIST MOVIE OF THE WEEK
-              </div>
-              <div className="text-5xl text-white">
-                Experience the Magic of <br />
-                Cinema: Book Your Tickets <br />
-                Today
-              </div>
-            </div>
-          </section>
-
-          <main className="w-full p-3 md:max-w-[1440px] md:justify-self-center md:p-20">
-            {/* category selector */}
-            <div className="flex flex-row gap-5">
-              <span
-                onClick={() => setCategory("now_playing")}
-                className={`${category == "now_playing" && "border-blue-primary border-b-4 px-1.5"} cursor-pointer`}
-              >
-                Now Playing
-              </span>
-              <span
-                onClick={() => setCategory("popular")}
-                className={`${category == "popular" && "border-blue-primary border-b-4 px-1.5"} cursor-pointer`}
-              >
-                Popular
-              </span>
-              <span
-                onClick={() => setCategory("top_rated")}
-                className={`${category == "top_rated" && "border-blue-primary border-b-4 px-1.5"} cursor-pointer`}
-              >
-                Top Rated
-              </span>
-              <span
-                onClick={() => setCategory("upcoming")}
-                className={`${category == "upcoming" && "border-blue-primary border-b-4 px-1.5"} cursor-pointer`}
-              >
-                Upcoming
-              </span>
-            </div>
-            {/* search film? */}
-            <div className="flex flex-col pt-2.5 md:flex-row">
-              <div className="event">
-                <label className="m-5 text-base font-semibold">
-                  Cari Event
-                </label>
-                <br />
-                <input
-                  className="border-label-genre m-1 w-full border p-2 md:w-[350px]"
-                  type="text"
-                />
-              </div>
-              <div className="filter">
-                <label className="m-5 text-base font-semibold"> Filter </label>
-                <div className="flex flex-row flex-wrap gap-3">
-                  {movieState.genres.length > 0 &&
-                    movieState.genres.map((itemGenre) => {
-                      return (
-                        <span
-                          className="bg-label-genre text-label hover:bg-blue-primary inline-block rounded-md p-1.5 hover:text-white"
-                          key={itemGenre.id}
-                          onClick={() => {
-                            genreOnclick(itemGenre.id);
-                          }}
-                        >
-                          {itemGenre.name}
-                        </span>
-                      );
-                    })}
-                </div>
-              </div>
-            </div>
-
-            {/* movie section */}
-            <div className="w-full overflow-x-scroll xl:justify-items-center">
-              <div
-                className="grid w-max grid-cols-4 gap-1 px-1 py-2 md:gap-5"
-                id="content-area"
-              >
-                {/* content  */}
-                {data.map((itemMovie) => {
-                  return <CardMovie itemMovie={itemMovie} key={itemMovie.id} />;
+          {/* filter by genre */}
+          <div className="filter">
+            <label className="m-5 text-base font-semibold"> Filter </label>
+            <div className="flex flex-row flex-wrap gap-3">
+              {movieState.genres.length > 0 &&
+                movieState.genres.map((itemGenre) => {
+                  return (
+                    <span
+                      className={`${selectGenreStyle(itemGenre.id)} inline-block cursor-pointer rounded-md p-1.5`}
+                      key={itemGenre.id}
+                      onClick={() => {
+                        // genreOnclick(itemGenre.id);
+                        selectGenreClick(itemGenre.id);
+                      }}
+                    >
+                      {itemGenre.name}
+                    </span>
+                  );
                 })}
-                {/* end content  */}
-              </div>
             </div>
+          </div>
+        </div>
 
-            <section className="m-5 mt-2.5 flex flex-row gap-5 justify-self-center">
-              {[1, 2, 3, 4, 5].map((pageNumber, idx) => {
-                return (
-                  <div
-                    key={idx}
-                    className={`${parseInt(searchParams.get("page")) == pageNumber && "bg-blue-700 text-white"} inline-block rounded-full bg-[#A0A3BD1A] px-4 py-2 text-[#A0A3BD]`}
-                    onClick={() => {
-                      // logika paginasi
-                      setSearchParams((searchParams) => {
-                        if (searchParams.has("page")) {
-                          searchParams.set("page", pageNumber);
-                        } else {
-                          searchParams.append("page", pageNumber);
-                        }
-                        return searchParams;
-                      });
-                    }}
-                  >
-                    {pageNumber}
-                  </div>
-                );
+        {/* movie section */}
+        {movieState.isLoading && <LoadingCircle></LoadingCircle>}
+        {!movieState.isLoading && (
+          <div className="w-full overflow-x-scroll xl:justify-items-center">
+            <div
+              className="grid w-max grid-cols-4 gap-1 px-1 py-2 md:gap-5"
+              id="content-area"
+            >
+              {/* content  */}
+              {movieState.movies.map((itemMovie) => {
+                return <CardMovie itemMovie={itemMovie} key={itemMovie.id} />;
               })}
-            </section>
-          </main>
-        </>
-      )}
+              {/* end content  */}
+            </div>
+          </div>
+        )}
+
+        {/* pagenation button */}
+        <section className="m-5 mt-2.5 flex flex-row gap-5 justify-self-center">
+          <div
+            className={`${pageNumber[0] == 1 ? "hidden" : "inline-block"} bg-blue-primary cursor-pointer rounded-full border px-4 py-2 text-[#A0A3BD]`}
+            onClick={() =>
+              setPageNumber((dataNumber) =>
+                dataNumber.map((eleArr) => eleArr - 1),
+              )
+            }
+          >
+            👈
+          </div>
+          {pageNumber.map((pageNumber, idx) => {
+            return (
+              <div
+                key={idx}
+                className={`${parseInt(searchParams.get("page")) == pageNumber && "bg-blue-700 text-white"} inline-block cursor-pointer rounded-full bg-[#A0A3BD1A] px-4 py-2 text-[#A0A3BD]`}
+                onClick={() => {
+                  // logika paginasi
+                  setSearchParams((searchParams) => {
+                    if (searchParams.has("page")) {
+                      searchParams.set("page", pageNumber);
+                    } else {
+                      searchParams.append("page", pageNumber);
+                    }
+                    return searchParams;
+                  });
+                }}
+              >
+                {pageNumber}
+              </div>
+            );
+          })}
+          <div
+            className={`bg-blue-primary inline-block cursor-pointer rounded-full border px-4 py-2 text-[#A0A3BD]`}
+            onClick={() =>
+              setPageNumber((dataNumber) =>
+                dataNumber.map((eleArr) => eleArr + 1),
+              )
+            }
+          >
+            👉
+          </div>
+        </section>
+      </section>
     </Fragment>
   );
 }
