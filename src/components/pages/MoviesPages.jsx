@@ -112,7 +112,7 @@ function MoviesPages() {
 
       <section className="w-full p-3 md:max-w-[1440px] md:justify-self-center md:p-20">
         {/* search & filter genre film? */}
-        <div className="flex flex-col pt-2.5 md:flex-row">
+        <div className="flex flex-col justify-self-center pt-2.5 md:max-w-[1124px] md:flex-row">
           <div className="event">
             <label className="m-5 text-base font-semibold">Cari Event</label>
             <br />
@@ -131,7 +131,7 @@ function MoviesPages() {
                 movieState.genres.map((itemGenre) => {
                   return (
                     <span
-                      className={`${selectGenreStyle(itemGenre.id)} inline-block cursor-pointer rounded-md p-1.5`}
+                      className={`${selectGenreStyle(itemGenre.id)} text-label border-label-genre inline-block cursor-pointer rounded-md border-1 p-1.5`}
                       key={itemGenre.id}
                       onClick={() => {
                         // genreOnclick(itemGenre.id);
@@ -164,7 +164,7 @@ function MoviesPages() {
         )}
 
         {/* pagenation button */}
-        <section className="m-5 mt-2.5 flex flex-row gap-5 justify-self-center">
+        <section className="m-5 mt-2.5 flex flex-row gap-0 justify-self-center md:gap-5">
           <div
             className={`${pageNumber[0] == 1 ? "hidden" : "inline-block"} bg-blue-primary cursor-pointer rounded-full border px-4 py-2 text-[#A0A3BD]`}
             onClick={() =>
