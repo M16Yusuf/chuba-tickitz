@@ -6,7 +6,7 @@ import profile_image from "/src/assets/img/profile_image.jpg";
 function NavbarAdmin() {
   const [toggleBurger, setToggleBurger] = useState(false);
   return (
-    <header className="sticky top-0 z-10 w-full bg-white md:shadow-md">
+    <header className="sticky top-0 z-10 w-full bg-white shadow md:shadow-md">
       <nav
         className="bg-white-500 flex w-full items-center justify-between p-6 md:justify-around"
         id="nav"
@@ -107,21 +107,21 @@ function NavbarAdmin() {
         </Link>
         <Link
           className="block border border-solid border-gray-100 p-3 text-center"
+          to={"/admin/dashboard"}
+        >
+          Dashboard
+        </Link>
+        <Link
+          className="block border border-solid border-gray-100 p-3 text-center"
+          to={"/admin/addmovie"}
+        >
+          Add Movie
+        </Link>
+        <Link
+          className="block border border-solid border-gray-100 p-3 text-center"
           to={"/home"}
         >
           Home
-        </Link>
-        <Link
-          className="block border border-solid border-gray-100 p-3 text-center"
-          to={"/movies"}
-        >
-          Movie
-        </Link>
-        <Link
-          className="block border border-solid border-gray-100 p-3 text-center"
-          to={"/buyticket"}
-        >
-          Buy Ticket
         </Link>
       </div>
     </header>
