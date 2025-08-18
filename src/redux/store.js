@@ -8,6 +8,7 @@ import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE } from "redux-persist
 
 // imort slice
 import movieReducer from "./slice/movieSlice";
+import userReducer from "./slice/userSlice";
 
 const persistConfig = {
   key: "chuba-tickitz:redux",
@@ -18,6 +19,7 @@ const persistedReducer = persistReducer(
   persistConfig,
   combineReducers({
     movies: movieReducer,
+    users: userReducer,
   })
 )
 
