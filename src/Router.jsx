@@ -22,19 +22,35 @@ import AddMoviePage from "./components/pages/admin/AddMovie.jsx";
 // component layout
 import LayoutHome from "./components/layout/LayoutHome.jsx";
 import LayoutMovie from "./components/layout/LayoutMovie.jsx";
-import LayoutProfile from "./components/layout/LayoutProfile.jsx";
-import LayoutAdmin from "./components/layout/LayoutAdmin.jsx";
+import LayoutAuth from "./components/layout/LayoutAuth.jsx";
 
 // private route
-import PrivateRoute from "./components/Auth/PrivateRoute.jsx";
+import {
+  PrivateRoute,
+  PublicRoute,
+  AdminRoute,
+} from "./components/Auth/PrivateRoute.jsx";
 
 function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* <Route index element={<Home />}></Route> */}
-        <Route path="login" element={<Login />} />
-        <Route path="register" element={<Register />} />
+        <Route
+          path="login"
+          element={
+            <PublicRoute redirectTo="/profile">
+              <Login />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="register"
+          element={
+            <PublicRoute redirectTo="/profile">
+              <Register />
+            </PublicRoute>
+          }
+        />
 
         {/* main route layoutHome for home, movie, and buy ticket */}
         <Route path="/" element={<LayoutHome />}>
@@ -53,7 +69,7 @@ function Router() {
         </Route>
 
         {/* route for layout profile */}
-        <Route path="profile" element={<LayoutProfile />}>
+        <Route path="profile" element={<LayoutAuth />}>
           <Route
             index
             element={
@@ -64,7 +80,14 @@ function Router() {
           />
         </Route>
 
-        <Route path="admin" element={<LayoutAdmin />}>
+        <Route
+          path="admin"
+          element={
+            <AdminRoute redirectTo={"/profile"}>
+              <LayoutAuth />
+            </AdminRoute>
+          }
+        >
           <Route index path="dashboard" element={<DashboardPage />} />
           <Route path="addmovie" element={<AddMoviePage />} />
         </Route>
