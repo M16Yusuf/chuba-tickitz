@@ -46,6 +46,7 @@ function LoginPage() {
         closeOnClick: true,
         draggable: false,
       });
+      dispatch(authAction.resetAuthState());
     }
   }, [authState.error]);
 
