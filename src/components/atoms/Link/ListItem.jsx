@@ -9,7 +9,9 @@ import { Link } from "react-router-dom";
 function ListItem(props) {
   return (
     <li className={props.className}>
-      <Link to={props.to}>{props.listText}</Link>
+      <Link to={props.to} className="block h-full w-full">
+        {props.listText}
+      </Link>
     </li>
   );
 }
