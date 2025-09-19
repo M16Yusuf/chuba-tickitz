@@ -1,25 +1,65 @@
-import React, { Fragment, useState } from "react";
-
-// import "../../assets/styles/pages/register-login.css";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { LoginPersist } from "/src/components/Auth/LoginPersist.jsx";
+
+// toastify
+import { ToastContainer, toast } from "react-toastify";
+
+// redux state regAccount
+import { useDispatch, useSelector } from "react-redux";
+import { authRegAction } from "../../redux/slice/authSlice";
 
 function RegisterPage() {
   const [error, setError] = useState([]);
   const navigate = useNavigate();
   const [toggleEye, setToggleEye] = useState(false);
 
+  // auth dispach and state
+  const dispatch = useDispatch();
+  const regStatState = useSelector((state) => state.reg_status);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (regStatState.isSuccess == true) {
+        navigate("/login");
+      }
+    }, 1500);
+  }, [regStatState.isSuccess]);
+
+  useEffect(() => {
+    if (regStatState.isSuccess == true) {
+      toast.success("New user is registered successfully", {
+        position: "top-center",
+        theme: "colored",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: false,
+      });
+      dispatch(authRegAction.resetRegisterState());
+    }
+
+    if (regStatState.isFailed == true) {
+      toast.error(regStatState.error.payload.error, {
+        position: "top-center",
+        theme: "colored",
+        autoClose: 3000,
+        hideProgressBar: false,
+        pauseOnHover: false,
+        closeOnClick: true,
+        draggable: false,
+      });
+      dispatch(authRegAction.resetRegisterState());
+    }
+  }, [regStatState.isSuccess, regStatState.isFailed]);
+
   function submitData(event) {
     event.preventDefault();
-    const formEmail = event.target.ele_mail.value;
-    const formPass = event.target.pass.value;
-    setTimeout(() => {
-      LoginPersist(formEmail, formPass);
-    }, 1000);
 
-    if (localStorage.getItem("koda3:login") != null) {
-      navigate("/profile");
-    }
+    const data = {
+      email: event.target.ele_mail.value,
+      password: event.target.pass.value,
+    };
+    dispatch(authRegAction.postRegisterThunk(data));
   }
 
   function validationInput(ev) {
@@ -82,6 +122,7 @@ function RegisterPage() {
 
   return (
     <main className="fixed h-screen w-screen overflow-y-auto bg-black/60 bg-[url('/bg-avenger.png')] bg-cover bg-fixed bg-center bg-no-repeat bg-blend-overlay">
+      <ToastContainer />
       <section className="flex flex-col items-center">
         <div className="m-auto mt-5 w-[25%]">
           <img src="/logo-tickitz-white.png" alt="logo Tickitz" />

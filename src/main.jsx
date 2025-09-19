@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./assets/styles/index.css";
+import "react-toastify/dist/ReactToastify.css";
 
 import { Provider as ReduxProvider } from "react-redux";
 import reduxStore, { persistedStore } from "./redux/store.js";

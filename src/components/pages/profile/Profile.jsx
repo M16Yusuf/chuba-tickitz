@@ -1,12 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 import profile_image from "/src/assets/img/profile_image.jpg";
-
 // component
 import CardHistory from "./../../organism/CardHistory";
+// import redux state
+import { authAction } from "../../../redux/slice/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 function Profile() {
   const [toggleModal, setToggleModal] = useState(false);
   const [isDetailOrHistory, setDetailOrHistory] = useState(true);
+
+  const authState = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (authState.justLoggedIn) {
+      toast.success(
+        `Welcome back ${authState.user.first_name} ${authState.user.last_name}!`,
+        {
+          position: "top-center",
+          theme: "colored",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: false,
+        },
+      );
+      dispatch(authAction.clearJustLoggedIn()); // reset flag
+    }
+  }, []);
 
   const dummydata = {
     first: "Muhammad",
@@ -46,6 +69,7 @@ function Profile() {
   ];
   return (
     <main className="bg-background w-full justify-self-center md:px-20">
+      <ToastContainer />
       {/* section navigation switch "detail account" or "order history" on small screen */}
       <div className="flex w-full flex-row justify-around bg-white shadow-md md:hidden">
         <span
@@ -78,11 +102,18 @@ function Profile() {
               />
             </div>
             <div className="flex flex-col items-center gap-2">
-              <img
-                className="h-[136px] w-[136px] rounded-full shadow-md"
-                src={profile_image}
-                alt="profile_page"
-              />
+              <div className="relative">
+                <img
+                  className="h-[136px] w-[136px] rounded-full shadow-md"
+                  src={profile_image}
+                  alt="profile_page"
+                />
+                <img
+                  className="absolute right-2 bottom-0 h-8 w-8 cursor-pointer rounded-full bg-white p-1.5 hover:scale-105"
+                  src="/edit.svg"
+                  onClick={() => setToggleModal(!toggleModal)}
+                />
+              </div>
               <span className="text-xl font-semibold text-[#14142B]">
                 Muhammad Yusuf
               </span>
@@ -127,6 +158,11 @@ function Profile() {
           className={`${!toggleModal && "hidden"} fixed inset-0 bg-[rgb(0,0,0,0.8)]`}
           onClick={() => setToggleModal(!toggleModal)}
         ></div>
+
+        {/* div form upload avatar */}
+        <div className="">
+          <form action=""></form>
+        </div>
 
         <section
           className={`flex flex-col justify-center gap-6 p-8 md:m-[28px] md:w-full md:gap-5 md:p-0`}

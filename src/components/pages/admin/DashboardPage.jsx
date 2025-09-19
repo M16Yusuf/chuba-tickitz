@@ -1,13 +1,38 @@
+import { useEffect, useState } from "react";
+// chart import
 import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js";
 import LineChart from "../../organism/LineChart";
-import { useState } from "react";
+// redux inmport
+import { authAction } from "../../../redux/slice/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+// toast import
+import { ToastContainer, toast } from "react-toastify";
 
 Chart.register(CategoryScale);
 
 function DashboardPage() {
-  const dummyLabel = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
+  const authState = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (authState.justLoggedIn) {
+      toast.success(
+        `Welcome back ${authState.user.first_name} ${authState.user.last_name}!`,
+        {
+          position: "top-center",
+          theme: "colored",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: false,
+        },
+      );
+      dispatch(authAction.clearJustLoggedIn()); // reset flag
+    }
+  }, []);
+
+  const dummyLabel = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
   // chart 1 useState
   const [dataChartOne, setDataChartOne] = useState([
     400, 600, 350, 200, 370, 200,
@@ -81,6 +106,7 @@ function DashboardPage() {
   return (
     <main className="flex h-max flex-col gap-14 bg-[#f5f5f5] md:p-20 xl:items-center">
       {/* first chart */}
+      <ToastContainer />
       <section className="flex w-full flex-col gap-4 rounded-2xl bg-white px-1 py-8 md:p-5 xl:w-max">
         <span className="text-lg font-semibold">Sales Chart</span>
         <form id="form-chart1">
