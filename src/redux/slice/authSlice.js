@@ -7,6 +7,7 @@ const initialState = {
   isLoading: false,
   isSuccess: false,
   isFailed: false,
+  justLoggedIn: false,
   error: null,
 }
 
@@ -44,6 +45,9 @@ const authSlice = createSlice({
       state.isSuccess = false;
       state.isFailed = false;
       state.error = null;
+    },
+    clearJustLoggedIn: (state) => {
+      state.justLoggedIn = false
     }
   },
   extraReducers: (builder) =>
@@ -52,11 +56,13 @@ const authSlice = createSlice({
         state.isLoading = true;
         state.isSuccess = false;
         state.isFailed = false;
+        state.justLoggedIn = false;
         state.error = null;
       })
       .addCase(postLoginThunk.fulfilled, (state, { payload }) => {
         state.user = payload.resultData
         state.isLoading = false;
+        state.justLoggedIn = true;
         state.isSuccess = true;
       })
       .addCase(postLoginThunk.rejected, (state, { payload, error }) => {
