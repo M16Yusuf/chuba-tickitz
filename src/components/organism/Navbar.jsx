@@ -168,18 +168,31 @@ function Navbar() {
           </>
         )}
 
-        {navBtn.map((nav, idx) => {
-          return (
-            <ListItem
-              listText={nav.text}
-              key={idx}
-              to={nav.route}
-              className={
-                "block border border-solid border-gray-100 p-3 text-center"
-              }
-            />
-          );
-        })}
+        {authState.user.role != "admin"
+          ? navBtn.map((nav, idx) => {
+              return (
+                <ListItem
+                  listText={nav.text}
+                  key={idx}
+                  to={nav.route}
+                  className={
+                    "block border border-solid border-gray-100 p-3 text-center"
+                  }
+                />
+              );
+            })
+          : navAdmin.map((nav, idx) => {
+              return (
+                <ListItem
+                  listText={nav.text}
+                  key={idx}
+                  to={nav.route}
+                  className={
+                    "block border border-solid border-gray-100 p-3 text-center"
+                  }
+                />
+              );
+            })}
       </ul>
     </header>
   );
