@@ -1,20 +1,138 @@
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import profile_image from "/src/assets/img/profile_image.jpg";
+import axios from "axios";
 // component
 import CardHistory from "./../../organism/CardHistory";
+import UpdateAvatar from "./../../organism/UpdateAvatar";
 // import redux state
-import { authAction } from "../../../redux/slice/authSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { authAction } from "../../../redux/slice/authSlice";
+import { userAction } from "../../../redux/slice/userSlice";
 
 function Profile() {
   const [toggleModal, setToggleModal] = useState(false);
+  const [toggleModalAvatar, setToggleModalAvatar] = useState(false);
   const [isDetailOrHistory, setDetailOrHistory] = useState(true);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [histories, setHistories] = useState([]);
 
   const authState = useSelector((state) => state.auth);
+  const userState = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
+  // disable button logic
+  const isButtonDisabled =
+    !newPassword || !confirmPassword || newPassword !== confirmPassword;
+
+  // delete auth/user/logout
+  function deleteSession() {
+    dispatch(authAction.resetAuthState());
+    dispatch(userAction.deleteUserState());
+  }
+
+  // function for update profile
+  async function submitUpdateProfile(event) {
+    event.preventDefault();
+    const data = {
+      first_name: event.target.first_name.value,
+      last_name: event.target.last_name.value,
+      phone: event.target.phone_number.value,
+    };
+
+    try {
+      const responseData = await axios({
+        method: "PATCH",
+        url: `${import.meta.env.VITE_HOST_URL}/users/password`,
+        data: data,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authState.user.token}`,
+        },
+      });
+
+      // send update notification if success update profile
+      if (responseData.status === 200) {
+        toast.success("Profile updated", {
+          position: "top-center",
+          theme: "colored",
+        });
+      }
+      // close modal after update
+      setToggleModal(false);
+      // update user redux state after success update
+      dispatch(userAction.getUserThunk(authState.user.token));
+    } catch (error) {
+      console.log(error);
+      // if error bacuse unauthorized, delete all data session (expired token)
+      if (error.status == 401) {
+        deleteSession();
+      }
+      // error notification
+      toast.error(
+        error.response?.data?.message ||
+          "Failed to update profile. Please try again.",
+        {
+          position: "top-center",
+          theme: "colored",
+        },
+      );
+    }
+  }
+
+  // function for update password
+  async function submitUpdatePassword(event) {
+    event.preventDefault();
+    const data = {
+      email: userState.user.email,
+      password: event.target.pass.value,
+    };
+
+    try {
+      const responseData = await axios({
+        method: "PATCH",
+        url: `${import.meta.env.VITE_HOST_URL}/users`,
+        data: data,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authState.user.token}`,
+        },
+      });
+
+      // send update notification if success update password
+      if (responseData.status === 200) {
+        toast.success("Password updated", {
+          position: "top-center",
+          theme: "colored",
+        });
+      }
+      // close modal after update
+      setToggleModal(false);
+      // update user redux state after success update
+      dispatch(userAction.getUserThunk(authState.user.token));
+    } catch (error) {
+      console.log(error);
+      // if error bacuse unauthorized, delete all data session (expired token)
+      if (error.status == 401) {
+        deleteSession();
+      }
+      // error notification
+      toast.error(
+        error.response?.data?.message ||
+          "Failed to update avatar. Please try again.",
+        {
+          position: "top-center",
+          theme: "colored",
+        },
+      );
+    }
+  }
+
+  // on render component
   useEffect(() => {
+    dispatch(userAction.getUserThunk(authState.user.token));
+
+    // display toastify welcome message
     if (authState.justLoggedIn) {
       toast.success(
         `Welcome back ${authState.user.first_name} ${authState.user.last_name}!`,
@@ -29,44 +147,32 @@ function Profile() {
       );
       dispatch(authAction.clearJustLoggedIn()); // reset flag
     }
+
+    // fetch histories data user
+    (async function () {
+      try {
+        const responseData = await axios({
+          method: "GET",
+          url: `${import.meta.env.VITE_HOST_URL}/histories`,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authState.user.token}`,
+          },
+        });
+        // Destructuring response data
+        const {
+          data: { data: resultdata },
+        } = responseData;
+        setHistories(resultdata);
+      } catch (error) {
+        // if error bacuse unauthorized, delete all data session
+        if (error.status == 401) {
+          deleteSession();
+        }
+      }
+    })();
   }, []);
 
-  const dummydata = {
-    first: "Muhammad",
-    last: "Yusuf",
-    email: "yusufsmd58@gmail.com",
-    hp: "082240563847",
-    pwd: "admin@123",
-  };
-
-  const dummyHistory = [
-    {
-      movie_id: 1311031,
-      movie_title: "Demon Slayer: Kimetsu no Yaiba — Infinity Castle",
-      date: "Thursday, 28 August 2025 - 07:30 pm",
-      category: "PG-13",
-      seat: ["C4", "C5", "C6"],
-      price: 10,
-      total: 30,
-      place: "ebv",
-      va: "12321328913829724",
-      is_paid: false,
-      data: "/dummy_qrcode.png",
-    },
-    {
-      movie_id: 378064,
-      movie_title: "A Silent Voice: The Movie",
-      date: "Wednesday, 15 May 2018 - 02:30 pm",
-      category: "PG-13",
-      seat: ["D6", "D7"],
-      price: 10,
-      total: 20,
-      place: "cineone21",
-      va: "4232871345915311",
-      is_paid: true,
-      data: "/dummy_qrcode.png",
-    },
-  ];
   return (
     <main className="bg-background w-full justify-self-center md:px-20">
       <ToastContainer />
@@ -104,18 +210,18 @@ function Profile() {
             <div className="flex flex-col items-center gap-2">
               <div className="relative">
                 <img
-                  className="h-[136px] w-[136px] rounded-full shadow-md"
-                  src={profile_image}
+                  className="h-[136px] w-[136px] rounded-full object-cover shadow-md"
+                  src={`${!userState.user.profile_path ? "/profile_default.jpg" : `${import.meta.env.VITE_HOST_URL}/img/profile/${userState.user.profile_path}`}`}
                   alt="profile_page"
                 />
                 <img
                   className="absolute right-2 bottom-0 h-8 w-8 cursor-pointer rounded-full bg-white p-1.5 hover:scale-105"
                   src="/edit.svg"
-                  onClick={() => setToggleModal(!toggleModal)}
+                  onClick={() => setToggleModalAvatar(!toggleModalAvatar)}
                 />
               </div>
               <span className="text-xl font-semibold text-[#14142B]">
-                Muhammad Yusuf
+                {`${userState.user.first_name} ${userState.user.last_name}`}
               </span>
               <span className="text-xs text-[#4E4B66]">Moviegoers</span>
             </div>
@@ -134,7 +240,8 @@ function Profile() {
                 Moviegoers
               </span>
               <span className="absolute bottom-5 left-4 text-2xl text-white">
-                320<span className="text-[10px]">points</span>
+                {userState.user.point}
+                <span className="text-[10px]">points</span>
               </span>
             </div>
 
@@ -153,16 +260,16 @@ function Profile() {
           </div>
         </aside>
 
-        {/* bg modal div */}
+        {/* bg modal div smallscreen for profile */}
         <div
           className={`${!toggleModal && "hidden"} fixed inset-0 bg-[rgb(0,0,0,0.8)]`}
           onClick={() => setToggleModal(!toggleModal)}
         ></div>
-
-        {/* div form upload avatar */}
-        <div className="">
-          <form action=""></form>
-        </div>
+        {/* bg modal for update profile */}
+        <div
+          className={`${!toggleModalAvatar && "hidden"} fixed inset-0 bg-[rgb(0,0,0,0.8)]`}
+          onClick={() => setToggleModalAvatar(!toggleModalAvatar)}
+        ></div>
 
         <section
           className={`flex flex-col justify-center gap-6 p-8 md:m-[28px] md:w-full md:gap-5 md:p-0`}
@@ -187,7 +294,7 @@ function Profile() {
           <section
             className={`${!isDetailOrHistory && "hidden md:hidden"} absolute top-[120px] left-1/2 -translate-x-1/2 transform md:static md:flex md:translate-none md:transform-none md:flex-col md:gap-5 md:bg-[rgb(0,0,0,0)]`}
           >
-            {/* as modal */}
+            {/* user details can be a form edit, and modal form in small screen */}
             <div
               className={`${!toggleModal && "hidden"} w-2xs rounded-xl bg-white p-4 md:flex md:w-full md:flex-col md:gap-5 md:bg-[rgb(0,0,0,0)] md:p-0`}
             >
@@ -195,7 +302,11 @@ function Profile() {
               <span className="text-2xl font-bold md:hidden">
                 Account Settings
               </span>
-              <div className="flex flex-col gap-5 bg-white md:rounded-xl md:p-5 md:shadow-md">
+              {/* first form for update profile */}
+              <form
+                onSubmit={submitUpdateProfile}
+                className="flex flex-col gap-5 bg-white md:rounded-xl md:p-5 md:shadow-md"
+              >
                 <span className="block w-full border-b border-gray-300 p-1">
                   Detail Information
                 </span>
@@ -206,8 +317,9 @@ function Profile() {
                     </label>
                     <input
                       className="w-full rounded-md border border-gray-300 p-2"
+                      name="first_name"
                       type="text"
-                      defaultValue={dummydata.first}
+                      defaultValue={userState.user.first_name}
                     />
                   </div>
                   <div>
@@ -216,16 +328,18 @@ function Profile() {
                     </label>
                     <input
                       className="w-full rounded-md border border-gray-300 p-2"
+                      name="last_name"
                       type="text"
-                      defaultValue={dummydata.last}
+                      defaultValue={userState.user.last_name}
                     />
                   </div>
                   <div>
                     <label className="text-base text-[#4E4B66]">Email</label>
                     <input
-                      className="w-full rounded-md border border-gray-300 p-2"
+                      className="w-full cursor-not-allowed rounded-md border border-gray-300 bg-gray-100 p-2 text-gray-500"
                       type="text"
-                      defaultValue={dummydata.email}
+                      defaultValue={userState.user.email}
+                      disabled
                     />
                   </div>
                   <div>
@@ -234,14 +348,24 @@ function Profile() {
                     </label>
                     <input
                       className="w-full rounded-md border border-gray-300 p-2"
+                      name="phone_number"
                       type="text"
-                      defaultValue={dummydata.hp}
+                      defaultValue={userState.user.phone}
                     />
                   </div>
                 </div>
-              </div>
-              {/* <!-- account and privacy --> */}
-              <div className="flex flex-col gap-5 bg-white md:rounded-xl md:p-5 md:shadow-md">
+                <button
+                  type="submit"
+                  className="mb-5 block w-full cursor-pointer rounded-lg bg-blue-800 p-4 text-center text-white md:w-80"
+                >
+                  Update Change
+                </button>
+              </form>
+              {/* second form for update password */}
+              <form
+                onSubmit={submitUpdatePassword}
+                className="flex flex-col gap-5 bg-white md:rounded-xl md:p-5 md:shadow-md"
+              >
                 <span className="block w-full border-b border-gray-300 p-1">
                   Account and Privacy
                 </span>
@@ -253,35 +377,55 @@ function Profile() {
                     <input
                       className="w-full rounded-md border border-gray-300 p-2"
                       type="password"
-                      defaultValue={dummydata.pwd}
+                      placeholder="New password"
+                      onChange={(e) => setNewPassword(e.target.value)}
                     />
                   </div>
                   <div>
-                    <label className="text-base text-[#4E4B66]">
+                    <label
+                      className={`${newPassword == confirmPassword ? "text-[#4E4B66]" : "text-red-600"} text-base`}
+                    >
                       Confirm Password
                     </label>
                     <input
-                      className="w-full rounded-md border border-gray-300 p-2"
+                      className={`${newPassword == confirmPassword ? "border-gray-300" : "border-red-600 text-red-600"} w-full rounded-md border-2 p-2`}
+                      name="pass"
                       type="password"
-                      defaultValue={dummydata.pwd}
+                      placeholder="Confirm new password"
+                      onChange={(e) => setConfirmPassword(e.target.value)}
                     />
                   </div>
                 </div>
-              </div>
-              {/* button change update for wide screen */}
-              <span className="mt-5 block w-full rounded-lg bg-blue-800 p-4 text-center text-white md:w-80">
-                Update Change
-              </span>
+                <button
+                  type="submit"
+                  className={`${isButtonDisabled ? "cursor-not-allowed bg-gray-400" : "bg-blue-800"} mb-5 block w-full rounded-lg p-4 text-center text-white md:w-80`}
+                  disabled={isButtonDisabled}
+                >
+                  Update password
+                </button>
+              </form>
             </div>
           </section>
+
+          {/* form update avatar/profile */}
+          <div
+            className={`${!toggleModalAvatar && "hidden md:hidden"} fixed inset-0 flex items-center justify-center`}
+          >
+            <UpdateAvatar setToggleModalAvatar={setToggleModalAvatar} />
+          </div>
 
           {/* section for content order history */}
           <section
             className={`${isDetailOrHistory && "hidden md:hidden"} flex flex-col gap-7 md:w-full md:bg-[rgb(0,0,0,0)] md:p-0`}
           >
-            {dummyHistory.length > 0 &&
-              dummyHistory.map((history, idx) => {
-                return <CardHistory dataHistory={history} key={idx} />;
+            {histories.length > 0 &&
+              histories.map((history) => {
+                return (
+                  <CardHistory
+                    dataHistory={history}
+                    key={history.transaction_id}
+                  />
+                );
               })}
           </section>
         </section>
