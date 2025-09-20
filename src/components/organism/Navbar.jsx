@@ -5,6 +5,7 @@ import { Link } from "react-router";
 
 import { useDispatch, useSelector } from "react-redux";
 import { authAction } from "../../redux/slice/authSlice.js";
+import { userAction } from "../../redux/slice/userSlice.js";
 
 /**
  * Navbar Komponen organism, digunakan untuk beberapa page
@@ -25,9 +26,10 @@ function Navbar() {
     { text: "Add Movie", route: "/admin/addmovie" },
   ];
 
-  // delete auth/logout
+  // delete auth/user/logout
   function LogOutClick() {
     dispatch(authAction.resetAuthState());
+    dispatch(userAction.deleteUserState());
   }
 
   return (
