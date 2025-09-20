@@ -43,7 +43,7 @@ function Profile() {
     try {
       const responseData = await axios({
         method: "PATCH",
-        url: `${import.meta.env.VITE_HOST_URL}/users/password`,
+        url: `${import.meta.env.VITE_HOST_URL}/users`,
         data: data,
         headers: {
           "Content-Type": "application/json",
@@ -91,7 +91,7 @@ function Profile() {
     try {
       const responseData = await axios({
         method: "PATCH",
-        url: `${import.meta.env.VITE_HOST_URL}/users`,
+        url: `${import.meta.env.VITE_HOST_URL}/users/password`,
         data: data,
         headers: {
           "Content-Type": "application/json",
@@ -111,7 +111,6 @@ function Profile() {
       // update user redux state after success update
       dispatch(userAction.getUserThunk(authState.user.token));
     } catch (error) {
-      console.log(error);
       // if error bacuse unauthorized, delete all data session (expired token)
       if (error.status == 401) {
         deleteSession();
@@ -119,7 +118,7 @@ function Profile() {
       // error notification
       toast.error(
         error.response?.data?.message ||
-          "Failed to update avatar. Please try again.",
+          `Failed to update password, ${error.response.data.error}`,
         {
           position: "top-center",
           theme: "colored",
