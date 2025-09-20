@@ -13,6 +13,7 @@ import { userAction } from "../../redux/slice/userSlice.js";
 function Navbar() {
   const [toggleBurger, setToggleBurger] = useState(false);
   const authState = useSelector((state) => state.auth);
+  const userState = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const navBtn = [
@@ -78,9 +79,15 @@ function Navbar() {
               />
             </svg>
             <img
-              className="h-10 w-10 rounded-full"
+              className="h-10 w-10 rounded-full object-cover"
               onClick={() => setToggleBurger(!toggleBurger)}
-              src={`${!authState.user.avatar_path ? "/profile_default.jpg" : `${import.meta.env.VITE_HOST_URL}/img/profile/${authState.user.avatar_path}`}`}
+              src={
+                (authState.user.avatar_path &&
+                  `${import.meta.env.VITE_HOST_URL}/img/profile/${userState.user.avatar_path}`) ||
+                (userState.user.profile_path &&
+                  `${import.meta.env.VITE_HOST_URL}/img/profile/${userState.user.profile_path}`) ||
+                "/profile_default.jpg"
+              }
               alt="profile_img"
             />
           </div>
@@ -124,8 +131,14 @@ function Navbar() {
               }
             >
               <img
-                className="h-10 w-10 rounded-full"
-                src={`${!authState.user.avatar_path ? "/profile_default.jpg" : `${import.meta.env.VITE_HOST_URL}/img/profile/${authState.user.avatar_path}`}`}
+                className="h-10 w-10 rounded-full object-cover"
+                src={
+                  (authState.user.avatar_path &&
+                    `${import.meta.env.VITE_HOST_URL}/img/profile/${userState.user.avatar_path}`) ||
+                  (userState.user.profile_path &&
+                    `${import.meta.env.VITE_HOST_URL}/img/profile/${userState.user.profile_path}`) ||
+                  "/profile_default.jpg"
+                }
                 alt="profile_img"
               />
               <span>{`${authState.user.first_name} ${authState.user.last_name}`}</span>
