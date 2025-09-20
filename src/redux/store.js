@@ -21,7 +21,7 @@ const persistedReducer = persistReducer(
   persistConfig,
   combineReducers({
     movies: movieReducer,
-    users: userReducer,
+    user: userReducer,
     auth: authReducer,
     reg_status: regStatusReducer,
   })

@@ -14,7 +14,6 @@ const initialState = {
 const postLoginThunk = createAsyncThunk(
   "auth/login",
   async (dataBody, { rejectWithValue }) => {
-    console.log(dataBody)
     try {
       const responseData = await axios({
         method: "POST",
@@ -28,7 +27,6 @@ const postLoginThunk = createAsyncThunk(
       const { data: resultData } = responseData
       return { resultData }
     } catch (error) {
-      console.log(error)
       return rejectWithValue(error.response?.data || error.message)
     }
   }
@@ -93,7 +91,6 @@ const initRegisState = {
 const postRegisterThunk = createAsyncThunk(
   "auth/register",
   async (dataBody, { rejectWithValue }) => {
-    console.log(dataBody)
     try {
       const responseData = await axios({
         method: "POST",
