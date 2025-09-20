@@ -83,7 +83,7 @@ function Navbar() {
               onClick={() => setToggleBurger(!toggleBurger)}
               src={
                 (authState.user.avatar_path &&
-                  `${import.meta.env.VITE_HOST_URL}/img/profile/${userState.user.avatar_path}`) ||
+                  `${import.meta.env.VITE_HOST_URL}/img/profile/${authState.user.avatar_path}`) ||
                 (userState.user.profile_path &&
                   `${import.meta.env.VITE_HOST_URL}/img/profile/${userState.user.profile_path}`) ||
                 "/profile_default.jpg"
@@ -134,7 +134,7 @@ function Navbar() {
                 className="h-10 w-10 rounded-full object-cover"
                 src={
                   (authState.user.avatar_path &&
-                    `${import.meta.env.VITE_HOST_URL}/img/profile/${userState.user.avatar_path}`) ||
+                    `${import.meta.env.VITE_HOST_URL}/img/profile/${authState.user.avatar_path}`) ||
                   (userState.user.profile_path &&
                     `${import.meta.env.VITE_HOST_URL}/img/profile/${userState.user.profile_path}`) ||
                   "/profile_default.jpg"
