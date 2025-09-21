@@ -1,8 +1,9 @@
 import { useState } from "react";
+import axios from "axios";
 
 import ListItem from "../atoms/Link/ListItem.jsx";
 import { Link } from "react-router";
-
+// import redux state
 import { useDispatch, useSelector } from "react-redux";
 import { authAction } from "../../redux/slice/authSlice.js";
 import { userAction } from "../../redux/slice/userSlice.js";
@@ -28,9 +29,23 @@ function Navbar() {
   ];
 
   // delete auth/user/logout
-  function LogOutClick() {
-    dispatch(authAction.resetAuthState());
-    dispatch(userAction.deleteUserState());
+  async function LogOutClick() {
+    try {
+      const responseData = await axios({
+        method: "DELETE",
+        url: `${import.meta.env.VITE_HOST_URL}/auth`,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authState.user.token}`,
+        },
+      });
+      console.log(responseData.data.message);
+      // delete all state user alter succesfully blacklist token
+      dispatch(authAction.resetAuthState());
+      dispatch(userAction.deleteUserState());
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
