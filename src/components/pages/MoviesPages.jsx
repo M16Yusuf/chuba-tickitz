@@ -14,59 +14,54 @@ function MoviesPages() {
 
   const dispatch = useDispatch();
   const movieState = useSelector((state) => state.movies);
+  const authState = useSelector((state) => state.auth);
 
   // pagination and useSearchparam
   useEffect(() => {
-    let dataUrl = "";
-    if (searchParams.has("with_genres") && !searchParams.has("query")) {
-      dataUrl = `${import.meta.env.VITE_TMDB_API_URL}/discover/movie?${searchParams.toString()}&language=en-US&include_adult=false`;
-    } else if (!searchParams.has("with_genres") && searchParams.has("query")) {
-      dataUrl = `${import.meta.env.VITE_TMDB_API_URL}/search/movie?${searchParams.toString()}&language=en-US&include_adult=false`;
-    } else if (!searchParams.has("with_genres") && !searchParams.has("query")) {
-      dataUrl = `${import.meta.env.VITE_TMDB_API_URL}/movie/now_playing?$?${searchParams.toString()}&language=en-US&include_adult=false`;
-    }
+    let rawParams = searchParams.toString();
+    let cleanedParams = rawParams.replace(/%25/g, "&");
+    console.log(cleanedParams);
+    let dataUrl = `${import.meta.env.VITE_HOST_URL}/movies?${cleanedParams}`;
 
     dispatch(
       movieActions.getMovieThunk({
         url: dataUrl,
+        Authorization: `Bearer ${authState.user.token}`,
       }),
     );
   }, [searchParams]);
 
-  function selectGenreClick(genreid) {
+  function selectGenreClick(genreName) {
     setSearchParams((param) => {
-      if (param.has("with_genres")) {
-        let current = param
-          .get("with_genres")
-          .split(",")
-          .map((eleArr) => parseInt(eleArr));
+      if (param.has("genres")) {
+        let current = param.get("genres").split("%");
 
-        if (current.includes(genreid)) {
-          if (current.length == 1) {
-            param.delete("with_genres");
+        if (current.includes(genreName)) {
+          if (current.length === 1) {
+            param.delete("genres");
           } else {
             param.set(
-              "with_genres",
-              current.filter((arrValue) => arrValue != genreid),
+              "genres",
+              current.filter((name) => name !== genreName).join("%"),
             );
           }
         } else {
-          current.push(genreid);
-          param.set("with_genres", current.join());
+          current.push(genreName);
+          param.set("genres", current.join("%"));
         }
       } else {
-        param.append("with_genres", genreid);
+        param.append("genres", genreName);
       }
       return param;
     });
   }
 
   // genre style
-  function selectGenreStyle(genreid) {
-    let data = searchParams.get("with_genres");
+  function selectGenreStyle(genreName) {
+    let data = searchParams.get("genres");
     if (data != null) {
-      data = data.split(",").map((eleArr) => parseInt(eleArr));
-      return data.includes(genreid)
+      const selectedGenres = data.split("%");
+      return selectedGenres.includes(genreName)
         ? "bg-blue-primary text-white"
         : "bg-label-genre text-label";
     }
@@ -77,11 +72,11 @@ function MoviesPages() {
     console.log(datSearch);
     setSearchParams((param) => {
       if (datSearch === "") {
-        param.delete("query");
-      } else if (param.has("query")) {
-        param.set("query", datSearch);
+        param.delete("search");
+      } else if (param.has("search")) {
+        param.set("search", datSearch);
       } else {
-        param.append("query", datSearch);
+        param.append("search", datSearch);
       }
       return param;
     });
@@ -131,11 +126,10 @@ function MoviesPages() {
                 movieState.genres.map((itemGenre) => {
                   return (
                     <span
-                      className={`${selectGenreStyle(itemGenre.id)} text-label border-label-genre inline-block cursor-pointer rounded-md border-1 p-1.5`}
+                      className={`${selectGenreStyle(itemGenre.name)} text-label border-label-genre inline-block cursor-pointer rounded-md border-1 p-1.5`}
                       key={itemGenre.id}
                       onClick={() => {
-                        // genreOnclick(itemGenre.id);
-                        selectGenreClick(itemGenre.id);
+                        selectGenreClick(itemGenre.name);
                       }}
                     >
                       {itemGenre.name}
@@ -147,8 +141,10 @@ function MoviesPages() {
         </div>
 
         {/* movie section */}
-        {movieState.isLoading && <LoadingCircle></LoadingCircle>}
-        {!movieState.isLoading && (
+        {movieState.isLoading && movieState.movies && (
+          <LoadingCircle></LoadingCircle>
+        )}
+        {!movieState.isLoading && movieState.movies && (
           <div className="w-full overflow-x-scroll xl:justify-items-center">
             <div
               className="grid w-max grid-cols-4 gap-1 px-1 py-2 md:gap-5"

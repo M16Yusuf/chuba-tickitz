@@ -15,13 +15,15 @@ const getMovieThunk = createAsyncThunk(
   async (urlParam, { rejectWithValue }) => {
     console.log(urlParam)
     try {
-      const responMovies = await axios.request({
+      // new data fetch form backend
+      const responMovies = await axios({
+        method: "GET",
         ...urlParam,
         headers: {
-          accept: 'application/json',
-          Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`,
-        }
+          "Content-Type": "application/json",
+        },
       });
+      console.log(responMovies);
 
       const responGenres = await axios.request({
         url: `${import.meta.env.VITE_TMDB_API_URL}/genre/movie/list?language=en`,
@@ -33,17 +35,8 @@ const getMovieThunk = createAsyncThunk(
 
       // process data before return to extrareducer
       // process genres, change genre_ids to name
-      const { data: { results: newmovie }, } = responMovies;
+      const { data: { data: resultMovies }, } = responMovies;
       const { data: { genres: resultGenres }, } = responGenres;
-      let resultMovies = [];
-      resultMovies = newmovie.map((movie) => {
-        const { genre_ids, ...rest } = movie;
-        const genres = genre_ids.map((genre_id) => {
-          const genreMatch = resultGenres.find(({ id }) => id === genre_id);
-          return genreMatch != undefined ? genreMatch.name : "unknown";
-        })
-        return { genres, ...rest };
-      });
 
       return { resultMovies, resultGenres };
     } catch (err) {

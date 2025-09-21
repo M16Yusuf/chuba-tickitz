@@ -6,7 +6,11 @@ function CardMovie({ itemMovie }) {
       <div className="group relative w-[240px] md:w-[264px]">
         <img
           className="h-[369px] rounded-md bg-cover md:h-[405px]"
-          src={`${import.meta.env.VITE_PREFIX_IMG_TMDB}/${itemMovie.poster_path}`}
+          src={
+            (itemMovie.poster_path &&
+              `${import.meta.env.VITE_HOST_URL}/img/poster/${itemMovie.poster_path}`) ||
+            "default-poster.jpg"
+          }
           alt={itemMovie.title}
         />
         <div className="absolute inset-0 hidden flex-col justify-center gap-5 rounded-md bg-[rgb(0,0,0,0.8)] group-hover:flex">
@@ -32,7 +36,7 @@ function CardMovie({ itemMovie }) {
         {itemMovie.genres.map((itemGenre, idx) => {
           return (
             <a className="bg-label-genre m-1 rounded-[18px] p-1" key={idx}>
-              {itemGenre}
+              {itemGenre.genre_name}
             </a>
           );
         })}

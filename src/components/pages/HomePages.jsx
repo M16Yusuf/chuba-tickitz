@@ -7,69 +7,43 @@ import CardMovie from "./../organism/CardMovie";
 import LoadingCircle from "./../organism/LoadingCircle";
 
 function HomePages() {
-  const [airing, setAiring] = useState([]);
-  const [camSoon, setCamSoon] = useState([]);
+  // localSatate
+  const [popular, setPopular] = useState([]);
+  const [upcoming, setUpcoming] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     (async function () {
       try {
         setIsLoading(true);
-        const options = {
+        const url_popular = `${import.meta.env.VITE_HOST_URL}/movies/popular`;
+        const url_upcoming = `${import.meta.env.VITE_HOST_URL}/movies/upcoming`;
+
+        const resPopularMovies = await axios.get(url_popular, {
           method: "GET",
-          params: { language: "en-US", page: "1" },
           headers: {
-            accept: "application/json",
-            Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`,
+            "Content-Type": "application/json",
           },
-        };
-
-        const url_airing = `${import.meta.env.VITE_TMDB_API_URL}/movie/now_playing`;
-        const url_coming = `${import.meta.env.VITE_TMDB_API_URL}/movie/upcoming`;
-        const url_genre = `${import.meta.env.VITE_TMDB_API_URL}/genre/movie/list?language=en`;
-
-        const responAiring = await axios.get(url_airing, options);
-        const responComing = await axios.get(url_coming, options);
-        const responGenre = await axios.get(url_genre, options);
+        });
+        const resUpcomingMovies = await axios.get(url_upcoming, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
         const {
-          data: { results: resultAiring },
-        } = responAiring;
+          data: { data: resultPopular },
+        } = resPopularMovies;
         const {
-          data: { results: resultComing },
-        } = responComing;
-        const {
-          data: { genres: resultGenres },
-        } = responGenre;
+          data: { data: resultUpcoming },
+        } = resUpcomingMovies;
 
-        let dataAiring = [];
-        let dataComing = [];
-
-        dataAiring = resultAiring.map(
-          ({ id, title, poster_path, genre_ids }) => ({
-            id: id,
-            title: title,
-            poster_path: poster_path,
-            genres: genre_ids.map((genID) => {
-              const genMatch = resultGenres.find(({ id }) => id === genID);
-              return genMatch != undefined ? genMatch.name : "unknown";
-            }),
-          }),
-        );
-
-        dataComing = resultComing.map(
-          ({ id, title, poster_path, genre_ids }) => ({
-            id: id,
-            title: title,
-            poster_path: poster_path,
-            genres: genre_ids.map((genID) => {
-              const genMatch = resultGenres.find(({ id }) => id === genID);
-              return genMatch != undefined ? genMatch.name : "unknown";
-            }),
-          }),
-        );
-        setAiring(dataAiring.slice(0, 4));
-        setCamSoon(dataComing.slice(0, 4));
+        console.log(resultPopular);
+        console.log(resultUpcoming);
+        // store on local state
+        setPopular(resultPopular);
+        setUpcoming(resultUpcoming);
         setIsLoading(false);
       } catch (err) {
         console.log(err);
@@ -80,7 +54,7 @@ function HomePages() {
   return (
     <>
       {isLoading && <LoadingCircle></LoadingCircle>}
-      {!isLoading && Object.keys(airing).length > 0 && (
+      {!isLoading && Object.keys(popular).length > 0 && (
         <main className="w-full p-3 md:max-w-[1440px] md:justify-self-center md:px-20 md:py-10">
           <section className="flex flex-col gap-5 md:flex-row md:justify-center">
             <div className="hero-text my-7 flex flex-col items-center justify-center gap-4 md:w-[580px] md:items-start">
@@ -94,42 +68,44 @@ function HomePages() {
                 Sign up and get the ticket with a lot of discount
               </span>
             </div>
-            {/* [grid-template-areas:'a_c_c','b_b_d'] */}
-            {/* <div className="flex flex-row gap-2 self-center">
-              <div className="flex flex-col gap-2">
-                <img src="./hero-item-wick.png" alt="john wick" />
-                <img
-                  src="./hero-item-spiderman.png"
-                  alt="spiderman home coming"
-                />
-              </div>
-              <div className="flex flex-col gap-2">
-                <img src="./hero-item-lionking.png" alt="the lion king" />
-                <img src="./hero-item-roblox.png" alt="roblox" />
-              </div>
-            </div> */}
 
             {/* KANAN */}
-            {airing && (
+            {popular && (
               <div className="grid h-[300px] w-full grid-cols-2 grid-rows-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,2fr)] gap-2 sm:h-[360px] sm:gap-[6px] md:h-[400px] md:gap-[8px] lg:w-5/12">
                 <img
-                  src={`${import.meta.env.VITE_PREFIX_IMG_TMDB}/${airing[0].poster_path}`}
-                  alt="hero-1"
+                  src={
+                    (popular[0].poster_path &&
+                      `${import.meta.env.VITE_HOST_URL}/img/poster/${popular[0].poster_path}`) ||
+                    "default-poster.jpg"
+                  }
+                  alt={popular[0].title}
                   className="col-start-1 col-end-2 row-start-1 row-end-2 h-full w-full rounded-t-[12px] object-cover object-[center_30%] sm:rounded-t-[16px] md:rounded-t-[20px]"
                 />
                 <img
-                  src={`${import.meta.env.VITE_PREFIX_IMG_TMDB}/${airing[1].poster_path}`}
-                  alt="hero-2"
+                  src={
+                    (popular[1].poster_path &&
+                      `${import.meta.env.VITE_HOST_URL}/img/poster/${popular[1].poster_path}`) ||
+                    "default-poster.jpg"
+                  }
+                  alt={popular[1].title}
                   className="col-start-2 col-end-3 row-start-1 row-end-3 h-full w-full rounded-t-[12px] object-cover object-top sm:rounded-t-[16px] md:rounded-t-[20px]"
                 />
                 <img
-                  src={`${import.meta.env.VITE_PREFIX_IMG_TMDB}/${airing[2].poster_path}`}
-                  alt="hero-3"
+                  src={
+                    (popular[2].poster_path &&
+                      `${import.meta.env.VITE_HOST_URL}/img/poster/${popular[2].poster_path}`) ||
+                    "default-poster.jpg"
+                  }
+                  alt={popular[2].title}
                   className="col-start-1 col-end-2 row-start-2 row-end-4 h-full w-full rounded-b-[12px] object-cover object-top sm:rounded-b-[16px] md:rounded-b-[20px]"
                 />
                 <img
-                  src={`${import.meta.env.VITE_PREFIX_IMG_TMDB}/${airing[3].poster_path}`}
-                  alt="hero-4"
+                  src={
+                    (popular[3].poster_path &&
+                      `${import.meta.env.VITE_HOST_URL}/img/poster/${popular[3].poster_path}`) ||
+                    "default-poster.jpg"
+                  }
+                  alt={popular[3].title}
                   className="col-start-2 col-end-3 row-start-3 row-end-4 h-full w-full rounded-b-[12px] object-cover object-center sm:rounded-b-[16px] md:rounded-b-[20px]"
                 />
               </div>
@@ -182,15 +158,16 @@ function HomePages() {
 
           <section className="flex flex-col items-center gap-5">
             <span className="text-blue-primary text-base font-bold">
-              {" "}
-              MOVIES{" "}
+              MOVIES
             </span>
             <p className="text-center text-3xl font-light">
               Exciting Movies That Should Be <br /> Watched Today
             </p>
             <div className="flex w-full flex-row gap-6 overflow-x-scroll md:ml-5 xl:justify-center">
-              {airing.map((itemMovie) => {
-                return <CardMovie key={itemMovie.id} itemMovie={itemMovie} />;
+              {popular.map((itemMovie) => {
+                return (
+                  <CardMovie key={itemMovie.movie_id} itemMovie={itemMovie} />
+                );
               })}
             </div>
 
@@ -223,8 +200,10 @@ function HomePages() {
             </div>
 
             <div className="flex w-full flex-row gap-6 overflow-x-scroll md:ml-5 xl:justify-center">
-              {camSoon.map((itemMovie) => {
-                return <CardMovie key={itemMovie.id} itemMovie={itemMovie} />;
+              {upcoming.map((itemMovie) => {
+                return (
+                  <CardMovie key={itemMovie.movie_id} itemMovie={itemMovie} />
+                );
               })}
             </div>
           </section>
