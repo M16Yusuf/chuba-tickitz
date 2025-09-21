@@ -44,7 +44,6 @@ function PublicRoute({ redirectTo, children }) {
  */
 function AdminRoute({ redirectTo, children }) {
   const authState = useSelector((state) => state.auth);
-  console.log(authState.user.role);
   if (authState.user.role != "admin") {
     return <Navigate to={redirectTo} replace />;
   }
