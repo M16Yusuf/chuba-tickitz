@@ -1,6 +1,9 @@
 import { useState } from "react";
 import QRCode from "react-qr-code";
 
+// import utils
+import formatDateAndCheckPast from "./../../utils/timestampToDate";
+
 function CardHistory({ dataHistory }) {
   const [isToggleExp, setToggleExp] = useState(false);
 
@@ -15,41 +18,6 @@ function CardHistory({ dataHistory }) {
       case "cinepolis":
         return "/logo-cinepolis.png";
     }
-  }
-
-  function formatDateAndCheckPast(dateString) {
-    const date = new Date(dateString);
-
-    const formattedDate = date
-      .toLocaleString("en-US", {
-        weekday: "long",
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-        timeZone: "Asia/Jakarta",
-      })
-      .replace(",", "")
-      .replace(" at ", " - ");
-
-    return {
-      formattedDate,
-      dateOnly: date.toLocaleDateString("id-ID", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-        timeZone: "Asia/Jakarta",
-      }),
-      timeOnly: date.toLocaleTimeString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-        timeZone: "Asia/Jakarta",
-      }),
-      isPast: date < new Date(),
-    };
   }
 
   return (
