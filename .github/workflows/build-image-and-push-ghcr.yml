@@ -18,4 +18,4 @@ jobs:
           image_name: ${{ github.repository }} # it will be lowercased internally
           image_tag: 1.3
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          extra_args: "--build-arg VITE_DEV=development --build-arg VITE_HOST=chuba-backend"
+          extra_args: "--build-arg VITE_DEV=development --build-arg VITE_HOST=/api"

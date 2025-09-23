@@ -22,6 +22,9 @@ FROM nginx:stable-bookworm
 COPY --from=builder /app/nginx/nginx.conf /etc/nginx/
 
 COPY --from=builder /app/nginx/sites-available/app.conf /etc/nginx/sites-available/
+
+COPY --from=builder /app/nginx/includes/proxy.conf /etc/nginx/includes/proxy.conf
+
 # create symlink
 RUN mkdir -p /etc/nginx/sites-enabled
 # buat solflink 
