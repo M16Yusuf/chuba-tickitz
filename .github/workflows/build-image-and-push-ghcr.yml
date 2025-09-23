@@ -1,9 +1,9 @@
 name: Building Image and Pushing to GHCR
 on: [push]
 # enable permission fo rewrite current package
-permissions:
-  contents: read
-  packages: write
+# permissions:
+#   contents: read
+#   packages: write
 
 jobs:
   Build-andPublish:
@@ -16,5 +16,5 @@ jobs:
         uses: macbre/push-to-ghcr@master
         with:
           image_name: ${{ github.repository }} # it will be lowercased internally
-          image_tag: 1.2
+          image_tag: 1.3
           github_token: ${{ secrets.GITHUB_TOKEN }}

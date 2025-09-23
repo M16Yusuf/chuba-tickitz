@@ -27,7 +27,7 @@ function BuyTicket() {
           </p>
           <span className="text-lg font-bold text-white">
             Please Download Your Ticket
-            <soan className="hidden md:inline">→</soan>
+            <span className="hidden md:inline">→</span>
           </span>
         </div>
       </section>
@@ -45,7 +45,7 @@ function BuyTicket() {
             <div className="bg-label-genre absolute right-[-16px] bottom-[-16px] h-8 w-8 rounded-full"></div>
           </div>
           <div className="border-label-genre w-[295px] border-t-2 bg-white p-5">
-            <div class="grid grid-cols-2 gap-y-5">
+            <div className="grid grid-cols-2 gap-y-5">
               <div className="w-full">
                 <label className="text-label text-[12px] font-semibold">
                   Movie
@@ -92,12 +92,12 @@ function BuyTicket() {
             </div>
           </div>
           <div className="mt-5 flex w-full flex-col gap-2.5">
-            <span className="border-blue-primary text-blue-primary block w-full rounded-md border p-2.5 text-center">
+            <span className="border-blue-primary text-blue-primary block w-full cursor-pointer rounded-md border p-2.5 text-center">
               Download
             </span>
             <Link
               to={"/profile"}
-              className="bg-blue-primary block w-full rounded-md p-2.5 text-center text-white"
+              className="bg-blue-primary block w-full cursor-pointer rounded-md p-2.5 text-center text-white"
             >
               Done
             </Link>
