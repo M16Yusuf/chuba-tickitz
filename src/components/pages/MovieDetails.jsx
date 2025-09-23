@@ -1,51 +1,80 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router";
-
 import axios from "axios";
-
+// import redux
+import { useSelector } from "react-redux";
 // component
 import LoadingCircle from "./../organism/LoadingCircle";
+import formatDateAndCheckPast from "./../../utils/timestampToDate";
 
 function MovieDetails() {
   const { movieId } = useParams();
   const [detailMovie, setDetailMovie] = useState({});
-  const [detailCrew, setDetailCrew] = useState({});
+  // const [detailCrew, setDetailCrew] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
+  const authState = useSelector((state) => state.auth);
+
   useEffect(() => {
+    // fetch data from backend
     (async function () {
       try {
         setIsLoading(true);
-        const urlDetails = `${import.meta.env.VITE_TMDB_API_URL}/movie/${movieId}`;
-        const urlCredit = `${import.meta.env.VITE_TMDB_API_URL}/movie/${movieId}/credits`;
-        const options = {
+        const responseData = await axios({
           method: "GET",
+          url: `${import.meta.env.VITE_HOST_URL}/movies/${movieId}`,
           headers: {
-            accept: "application/json",
-            Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`,
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authState.user.token}`,
           },
-        };
-
-        const responDetails = await axios.get(urlDetails, options);
-        const responCredit = await axios.get(urlCredit, options);
-        const { data: resultDetails } = responDetails;
-        const { data: Credit } = responCredit;
-        const findDirector = Credit.crew.find(
-          (dataDir) => dataDir.job === "Director",
-        );
-        const resultCredit = {};
-        resultCredit.director = findDirector?.original_name ?? "unknown";
-        resultCredit.cast = Credit.cast.slice(0, 4).map((data) => {
-          return data.original_name;
         });
-
-        setDetailMovie(resultDetails);
-        setDetailCrew(resultCredit);
+        // destructuring response
+        const {
+          data: { data: resultData },
+        } = responseData;
+        console.log(resultData);
+        setDetailMovie(resultData);
         setIsLoading(false);
-      } catch (err) {
-        console.log(err);
+      } catch (error) {
+        console.log(error);
       }
     })();
+
+    // (async function () {
+    //   try {
+    //     setIsLoading(true);
+    //     const urlDetails = `${import.meta.env.VITE_TMDB_API_URL}/movie/${movieId}`;
+    //     const urlCredit = `${import.meta.env.VITE_TMDB_API_URL}/movie/${movieId}/credits`;
+    //     const options = {
+    //       method: "GET",
+    //       headers: {
+    //         accept: "application/json",
+    //         Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`,
+    //       },
+    //     };
+
+    //     const responDetails = await axios.get(urlDetails, options);
+    //     const responCredit = await axios.get(urlCredit, options);
+    //     const { data: resultDetails } = responDetails;
+    //     const { data: Credit } = responCredit;
+    //     console.log(resultDetails);
+    //     console.log(Credit);
+    //     const findDirector = Credit.crew.find(
+    //       (dataDir) => dataDir.job === "Director",
+    //     );
+    //     const resultCredit = {};
+    //     resultCredit.director = findDirector?.original_name ?? "unknown";
+    //     resultCredit.cast = Credit.cast.slice(0, 4).map((data) => {
+    //       return data.original_name;
+    //     });
+
+    //     setDetailMovie(resultDetails);
+    //     setDetailCrew(resultCredit);
+    //     setIsLoading(false);
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // })();
   }, [movieId]);
 
   return (
@@ -56,7 +85,11 @@ function MovieDetails() {
           <section className="h-[450px] w-full justify-self-center">
             <img
               className="h-full w-full object-cover"
-              src={`${import.meta.env.VITE_PREFIX_IMG_TMDB}${detailMovie.backdrop_path}`}
+              src={
+                (detailMovie.backdrop_path &&
+                  `${import.meta.env.VITE_HOST_URL}/img/backdrop/${detailMovie.backdrop_path}`) ||
+                "/default-backdrop.jpg"
+              }
               alt={`${detailMovie.title} backdrop`}
             />
           </section>
@@ -65,8 +98,12 @@ function MovieDetails() {
               <div className="flex flex-col gap-5 md:flex-row md:items-end">
                 <img
                   className="h-auto w-[300px] self-center"
-                  src={`${import.meta.env.VITE_PREFIX_IMG_TMDB}${detailMovie.poster_path}`}
-                  alt={detailMovie.title}
+                  src={
+                    (detailMovie.poster_path &&
+                      `${import.meta.env.VITE_HOST_URL}/img/poster/${detailMovie.poster_path}`) ||
+                    "/default-poster.jpg"
+                  }
+                  alt={`${detailMovie.title} poster`}
                 />
 
                 <div className="details">
@@ -77,10 +114,10 @@ function MovieDetails() {
                     {detailMovie.genres.map((movie, idx) => {
                       return (
                         <span
-                          className="bg-label-genre m-1 rounded-lg p-1.5"
+                          className="bg-label-genre text-label m-1 rounded-full p-0 px-2"
                           key={idx}
                         >
-                          {movie.name}
+                          {movie.genre_name}
                         </span>
                       );
                     })}
@@ -89,28 +126,34 @@ function MovieDetails() {
                     <div>
                       <label> Release Date </label>
                       <br />
-                      <span>{detailMovie.release_date}</span>
+                      <span>
+                        {
+                          formatDateAndCheckPast(detailMovie.release_date)
+                            .dateOnly
+                        }
+                      </span>
                     </div>
                     <div>
                       <label> Directed by </label>
                       <br />
-                      <span>{detailCrew.director}</span>
+                      <span>{detailMovie.Director.name}</span>
                     </div>
                     <div>
                       <label> Duration </label>
                       <br />
-                      <span>{`${detailMovie.runtime} minutes`}</span>
+                      <span>{`${detailMovie.duration} minutes`}</span>
                     </div>
                     <div>
                       <label> cast </label>
                       <br />
-                      {detailCrew.cast.map((data, idx) => {
-                        return (
-                          <span className="p-1.5" key={idx}>
-                            {`${data}, `}
-                          </span>
-                        );
-                      })}
+                      {detailMovie.actors.length > 1 &&
+                        detailMovie.actors.map((data, idx) => {
+                          return (
+                            <span className="p-1.5" key={idx}>
+                              {`${data.actor_name}, `}
+                            </span>
+                          );
+                        })}
                     </div>
                   </div>
                 </div>

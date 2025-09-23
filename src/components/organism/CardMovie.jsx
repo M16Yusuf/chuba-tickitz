@@ -15,7 +15,7 @@ function CardMovie({ itemMovie }) {
         />
         <div className="absolute inset-0 hidden flex-col justify-center gap-5 rounded-md bg-[rgb(0,0,0,0.8)] group-hover:flex">
           <Link
-            to={`/movies/details/${itemMovie.id}`}
+            to={`/movies/details/${itemMovie.movie_id}`}
             className="flex h-12 w-44 items-center justify-center self-center rounded-md border border-white text-white hover:shadow-md hover:shadow-white"
           >
             Details
@@ -27,7 +27,7 @@ function CardMovie({ itemMovie }) {
       </div>
 
       <Link
-        to={`/movies/details/${itemMovie.id}`}
+        to={`/movies/details/${itemMovie.movie_id}`}
         className="text-lg font-bold md:text-2xl"
       >
         {itemMovie.title}
@@ -35,7 +35,10 @@ function CardMovie({ itemMovie }) {
       <div className="flex flex-row flex-wrap gap-1">
         {itemMovie.genres.map((itemGenre, idx) => {
           return (
-            <a className="bg-label-genre m-1 rounded-[18px] p-1" key={idx}>
+            <a
+              className="bg-label-genre text-label m-1 rounded-[18px] px-2"
+              key={idx}
+            >
               {itemGenre.genre_name}
             </a>
           );
