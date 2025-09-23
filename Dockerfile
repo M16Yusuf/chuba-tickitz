@@ -7,6 +7,13 @@ COPY package.json package-lock.json ./
 RUN npm ci
 # copy semua file
 COPY . .
+
+ARG VITE_DEV
+ENV VITE_ENVIRONMENT=${VITE_DEV}
+
+ARG VITE_HOST
+ENV VITE_HOST_URL=${VITE_HOST}
+
 # run script build vite
 RUN npm run build
 # stage 2: setup app
