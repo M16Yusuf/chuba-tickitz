@@ -23,24 +23,28 @@ const getMovieThunk = createAsyncThunk(
           "Content-Type": "application/json",
         },
       });
-      console.log(responMovies);
-
-      const responGenres = await axios.request({
-        url: `${import.meta.env.VITE_TMDB_API_URL}/genre/movie/list?language=en`,
-        headers: {
-          accept: 'application/json',
-          Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`,
-        }
-      });
-
-      // process data before return to extrareducer
-      // process genres, change genre_ids to name
       const { data: { data: resultMovies }, } = responMovies;
-      const { data: { genres: resultGenres }, } = responGenres;
-
-      return { resultMovies, resultGenres };
+      return { resultMovies };
     } catch (err) {
       return (rejectWithValue(err));
+    }
+  }
+)
+
+const getGenreThunk = createAsyncThunk(
+  "movies/get_genres",
+  async (_, { rejectWithValue }) => {
+    try {
+      const responGenres = await axios.request({
+        url: `${import.meta.env.VITE_HOST_URL}/movies/genres`,
+        headers: {
+          accept: 'application/json',
+        }
+      });
+      const { data: { data: resultGenres }, } = responGenres;
+      return { resultGenres };
+    } catch (error) {
+      return rejectWithValue(error)
     }
   }
 )
@@ -50,6 +54,7 @@ const movieSlice = createSlice({
   name: "movies",
   extraReducers: (builder) =>
     builder
+      // =========================== Get Filtered Movies ===========================
       .addCase(getMovieThunk.pending, (state) => {
         state.isLoading = true;
         state.isSuccess = false;
@@ -58,7 +63,6 @@ const movieSlice = createSlice({
       })
       .addCase(getMovieThunk.fulfilled, (state, { payload }) => {
         state.movies = payload.resultMovies;
-        state.genres = payload.resultGenres;
         state.isLoading = false;
         state.isSuccess = true;
       })
@@ -70,11 +74,32 @@ const movieSlice = createSlice({
         state.isLoading = false;
         state.isFailed = true;
       })
+      // =========================== Get all genres ===========================
+      .addCase(getGenreThunk.pending, (state) => {
+        state.isLoading = true;
+        state.isSuccess = false;
+        state.isFailed = false;
+        state.error = null;
+      })
+      .addCase(getGenreThunk.fulfilled, (state, { payload }) => {
+        state.genres = payload.resultGenres;
+        state.isLoading = false;
+        state.isSuccess = true;
+      })
+      .addCase(getGenreThunk.rejected, (state, { payload, error }) => {
+        state.error = {
+          payload,
+          error,
+        }
+        state.isLoading = false;
+        state.isFailed = true;
+      })
+
 });
 
 export const movieActions = {
   ...movieSlice.actions,
-  getMovieThunk,
+  getMovieThunk, getGenreThunk
 }
 
 export default movieSlice.reducer;

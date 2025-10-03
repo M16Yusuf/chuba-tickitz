@@ -16,7 +16,13 @@ function MoviesPages() {
   const movieState = useSelector((state) => state.movies);
   const authState = useSelector((state) => state.auth);
 
+  // on endering component
+  useEffect(() => {
+    dispatch(movieActions.getGenreThunk());
+  }, []);
+
   // pagination and useSearchparam
+  // on update state
   useEffect(() => {
     let rawParams = searchParams.toString();
     let cleanedParams = rawParams.replace(/%25/g, "&");
@@ -126,13 +132,13 @@ function MoviesPages() {
                 movieState.genres.map((itemGenre) => {
                   return (
                     <span
-                      className={`${selectGenreStyle(itemGenre.name)} text-label border-label-genre inline-block cursor-pointer rounded-md border-1 p-1.5`}
+                      className={`${selectGenreStyle(itemGenre.genre_name)} text-label border-label-genre inline-block cursor-pointer rounded-md border-1 p-1.5`}
                       key={itemGenre.id}
                       onClick={() => {
-                        selectGenreClick(itemGenre.name);
+                        selectGenreClick(itemGenre.genre_name);
                       }}
                     >
-                      {itemGenre.name}
+                      {itemGenre.genre_name}
                     </span>
                   );
                 })}
