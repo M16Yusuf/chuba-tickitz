@@ -128,12 +128,12 @@ function MoviesPages() {
           <div className="filter">
             <label className="m-5 text-base font-semibold"> Filter </label>
             <div className="flex flex-row flex-wrap gap-3">
-              {movieState.genres.length > 0 &&
+              {movieState.genres &&
                 movieState.genres.map((itemGenre) => {
                   return (
                     <span
                       className={`${selectGenreStyle(itemGenre.genre_name)} text-label border-label-genre inline-block cursor-pointer rounded-md border-1 p-1.5`}
-                      key={itemGenre.id}
+                      key={itemGenre.genre_id}
                       onClick={() => {
                         selectGenreClick(itemGenre.genre_name);
                       }}
@@ -147,10 +147,10 @@ function MoviesPages() {
         </div>
 
         {/* movie section */}
-        {movieState.isLoading && movieState.movies && (
+        {movieState.isLoadMovie && movieState.movies && (
           <LoadingCircle></LoadingCircle>
         )}
-        {!movieState.isLoading && movieState.movies && (
+        {!movieState.isLoadMovie && movieState.movies && (
           <div className="w-full overflow-x-scroll xl:justify-items-center">
             <div
               className="grid w-max grid-cols-4 gap-1 px-1 py-2 md:gap-5"

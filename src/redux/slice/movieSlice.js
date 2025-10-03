@@ -4,7 +4,8 @@ import axios from "axios";
 const initialState = {
   movies: [],
   genres: [],
-  isLoading: false,
+  isLoadMovie: false,
+  isLoadGenre: false,
   isSuccess: false,
   isFailed: false,
   error: null,
@@ -13,7 +14,6 @@ const initialState = {
 const getMovieThunk = createAsyncThunk(
   "movies/get_data",
   async (urlParam, { rejectWithValue }) => {
-    console.log(urlParam)
     try {
       // new data fetch form backend
       const responMovies = await axios({
@@ -56,14 +56,14 @@ const movieSlice = createSlice({
     builder
       // =========================== Get Filtered Movies ===========================
       .addCase(getMovieThunk.pending, (state) => {
-        state.isLoading = true;
+        state.isLoadMovie = true;
         state.isSuccess = false;
         state.isFailed = false;
         state.error = null;
       })
       .addCase(getMovieThunk.fulfilled, (state, { payload }) => {
         state.movies = payload.resultMovies;
-        state.isLoading = false;
+        state.isLoadMovie = false;
         state.isSuccess = true;
       })
       .addCase(getMovieThunk.rejected, (state, { payload, error }) => {
@@ -71,19 +71,19 @@ const movieSlice = createSlice({
           payload,
           error,
         }
-        state.isLoading = false;
+        state.isLoadMovie = false;
         state.isFailed = true;
       })
       // =========================== Get all genres ===========================
       .addCase(getGenreThunk.pending, (state) => {
-        state.isLoading = true;
+        state.isLoadGenre = true;
         state.isSuccess = false;
         state.isFailed = false;
         state.error = null;
       })
       .addCase(getGenreThunk.fulfilled, (state, { payload }) => {
         state.genres = payload.resultGenres;
-        state.isLoading = false;
+        state.isLoadGenre = false;
         state.isSuccess = true;
       })
       .addCase(getGenreThunk.rejected, (state, { payload, error }) => {
@@ -91,7 +91,7 @@ const movieSlice = createSlice({
           payload,
           error,
         }
-        state.isLoading = false;
+        state.isLoadGenre = false;
         state.isFailed = true;
       })
 
